@@ -123,7 +123,7 @@ class UserController extends Controller
      }
 
      public function index(){
-         $users = User::where('id', '>', 1)->get();
+         $users = User::where('id', '>', 1)->where('position', 'active')->get();
          return view('users', compact('users'));
      }
 
@@ -315,8 +315,10 @@ class UserController extends Controller
         if($user->id == 1){
             return back();
         }
-        $user->access->delete();
-        $user->delete();
+       // $user->access->delete();
+        $user->update([
+            'position' => 'inactive'
+        ]);
         return back()->with('message', 'User deleted successfully');
 
     }
