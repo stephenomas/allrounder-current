@@ -51,7 +51,8 @@
                                         <td>{{$sales->created_at}}</td>
                                         <td><a href="{{route('sales-list.show', ['sales_list'=> $sales->id])}}"><i class="ti-files"></i> Invoice </a> • @if (Auth::user()->role == 1)
 
-                                       <a href="{{route('sales-list.edit', ['sales_list'=> $sales->id])}}"> <i class="ti-ruler-pencil"></i>Edit</a> @endif</td>
+                                       <a href="{{route('sales-list.edit', ['sales_list'=> $sales->id])}}"> <i class="ti-ruler-pencil"></i>Edit</a>
+                                       <a href="{{route('sales-list.delete', ['sales'=> $sales->id])}}"> <i class="ti-trash"></i>Delete</a> @endif</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

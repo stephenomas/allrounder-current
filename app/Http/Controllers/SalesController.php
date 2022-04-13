@@ -235,4 +235,20 @@ class SalesController extends Controller
         return view('invoice', compact('sale'));
 
     }
+
+    public function delete(Sales $sales){
+        $user = Auth::user();
+        if($user->role == 1){
+            foreach($sales->salesitem as $items){
+                $prod = Product::where('id',$items->product_id)->first();
+                $prod->update([
+                    'status' => 'available'
+                ]);
+            }
+            $sales->delete();
+            return back()->with('message', 'Sales delete successfully');
+        }else{
+            return back();
+        }
+    }
 }

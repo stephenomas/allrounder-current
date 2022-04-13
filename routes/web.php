@@ -40,6 +40,7 @@ Route::get('/removecart/{id}', [SalesController::class, 'removecart'])->middlewa
 Route::get('/buyer-details', [SalesController::class, 'buyer'])->middleware('newsale');
 Route::post('/buyer-details', [SalesController::class, 'buyersave'])->middleware('newsale');
 Route::resource( '/sales-list',SalesController::class)->middleware('saleslist');
+Route::get('/sales-list/delete/{sales}', [SalesController::class, 'delete'])->name('sales-list.delete');
 
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create')->middleware('adduser');
 Route::post('/user/create', [UserController::class, 'store'])->name('user.store')->middleware('adduser');
