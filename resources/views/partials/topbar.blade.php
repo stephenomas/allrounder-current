@@ -28,7 +28,11 @@
 
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                        <img src="{{asset('assets/images/users/avatar-1.jpg')}}" alt="user-img" class="rounded-circle">
+                        <img src=@if (!empty(Auth::user()->photo))
+                        {{asset(Auth::user()->photo)}}
+                        @else
+                        {{asset('assets/images/users/avatar-1.jpg')}}
+                        @endif alt="user-img" class="rounded-circle">
                         <span class="profile-username">
                                 {{Auth::user()->name}} <span class="mdi mdi-chevron-down font-15"></span>
                         </span>

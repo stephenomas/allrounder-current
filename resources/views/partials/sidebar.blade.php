@@ -6,7 +6,11 @@
 
         <div class="user-details">
             <div class="text-center">
-                <img src="{{asset('assets/images/users/avatar-1.jpg')}}" alt="" class="rounded-circle img-thumbnail">
+                <img src=@if (!empty(Auth::user()->photo))
+                {{asset(Auth::user()->photo)}}
+                @else
+                {{asset('assets/images/users/avatar-1.jpg')}}
+                @endif alt="" class="rounded-circle img-thumbnail">
             </div>
             <div class="user-info">
                 <div class="dropdown">

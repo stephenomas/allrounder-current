@@ -83,7 +83,7 @@
                                                     <td>{{$re->title}}</td>
 
                                                     <td>{{$re->user->branch->name}}</td>
-                                                    <td>{{$re->user->created_at}}</td>
+                                                    <td>{{$re->created_at}}</td>
                                                     <td><a href="/report/{{$re->id}}/read"><i class="ti-book"></i> Read</a>  <a href="/report/{{$re->id}}/delete"><i class="ti-trash"></i> Delete</a></td>
                                                 </tr>
                                                 @endforeach

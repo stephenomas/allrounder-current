@@ -9,6 +9,7 @@ use App\Models\Sales;
 use App\Models\Branch;
 use App\Models\Report;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -281,14 +282,26 @@ class UserController extends Controller
             });
         }
 
+        if(request()->hasFile('photo')){
+            $gimages = $request->photo;
+            $gbasename = Str::random();
+            $goriginal = $gbasename.'.'.$gimages->getClientOriginalExtension();
+            $gimages->move(public_path('/upload'), $goriginal);
+            $gimagepath = 'upload/'.$goriginal;
+            // $inter = Image::make(public_path($gimagepath))->fit(1000, 1200);
+            // $inter->save();
 
+            $user->update([
+                'photo' => $gimagepath,
+            ]);
+        }
 
         if(!empty(request('password')) and !empty(request('oldpassword'))){
             if(Hash::check($request->oldpassword, $user->password)){
                 $user->update([
-                    'name' => $data['name'],
+                    'name' => $request->name,
                     'email' => $request->email,
-                    'phone' => $data['phone'],
+                    'phone' => $request->phone,
                     'branch_id' => $request->branch,
                     'password' => Hash::make($request->password)
                 ]);
@@ -298,9 +311,9 @@ class UserController extends Controller
 
         }else{
             $user->update([
-                'name' => $data['name'],
+                'name' => $request->name,
                 'email' => $request->email,
-                'phone' => $data['phone'],
+                'phone' => $request->phone,
                 'branch_id' => $request->branch,
 
             ]);

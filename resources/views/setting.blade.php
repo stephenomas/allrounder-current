@@ -82,30 +82,33 @@
                                             </div>
 
                                         @endif
-                                        <form method="POST" action="/settings" class="form-horizontal">
+                                        <form method="POST" action="/settings" class="form-horizontal" enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label" for="example-text-input">Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" value="{{$user->name}}" name="name" class="form-control" placeholder="amusa saheed" id="example-text-input">
+                                                    <input type="text" @if (Auth::user()->role != 1 ) hidden @endif value="{{$user->name}}" name="name" class="form-control" placeholder="amusa saheed" id="example-text-input">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label" for="example-text-input">Email</label>
                                                 <div class="col-sm-10">
-                                                    <input type="email"  value="{{$user->email}}" name="email" class="form-control" placeholder="abc@xyz.com" id="example-text-input">
+                                                    <input type="email" @if (Auth::user()->role != 1 ) hidden @endif  value="{{$user->email}}" name="email" class="form-control" placeholder="abc@xyz.com" id="example-text-input">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label" for="example-text-input">Phone</label>
                                                 <div class="col-sm-10">
-                                                    <input type="number"  value="{{$user->phone}}" name="phone" class="form-control" placeholder="080000" id="example-text-input">
+                                                    <input type="number" @if (Auth::user()->role != 1 ) hidden @endif  value="{{$user->phone}}" name="phone" class="form-control" placeholder="080000" id="example-text-input">
                                                 </div>
                                             </div>
+
+
+
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label" for="example-text-input">What Branch?</label>
                                                 <div class="col-sm-10">
-                                                    <select name="branch" class="select2 form-control" id="product" searchable="Search here..">
+                                                    <select name="branch"     @if (Auth::user()->role != 1 ) hidden @endif  class="select2 form-control" id="product" searchable="Search here..">
                                                             <option value="{{$user->branch->id}}" selected>{{$user->branch->name}}</option>
                                                             @foreach ($branch as $bran)
                                                             <option value="{{$bran->id}}">{{$bran->name}}</option>
@@ -132,6 +135,12 @@
                                                 <label class="col-sm-2 control-label" for="example-chasis">Confirm New Password</label>
                                                 <div class="col-sm-10">
                                                     <input type="password" id="example-chasis" name="password_confirmation" class="form-control" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label" for="example-chasis">Profile Image</label>
+                                                <div class="col-sm-10">
+                                                    <input type="file" id="example-chasis" name="photo" class="form-control" >
                                                 </div>
                                             </div>
 

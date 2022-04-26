@@ -19,7 +19,7 @@ class adminmid
     {    if(!isset(Auth::user()->role)){
         return redirect('/login');
         }
-        elseif(Auth::user()->id != 1 ){
+        elseif(Auth::user()->role != 1 ){
         return view('denied');
          }
         return $next($request);

@@ -81,8 +81,8 @@ Route::get('/view-model/{spec}/edit', [ProductController::class, 'editmodel'])->
 Route::put('/view-model/{spec}/edit', [ProductController::class, 'updatemodel'])->middleware('editspec');
 Route::get('/view-model/{spec}/delete', [ProductController::class, 'deletemodel'])->middleware('editspec');
 
-Route::get('/settings', [UserController::class, 'showadmin'])->middleware('adminmid');
-Route::post('/settings', [UserController::class, 'updateadmin'])->middleware('adminmid');
+Route::get('/settings', [UserController::class, 'showadmin']);
+Route::post('/settings', [UserController::class, 'updateadmin']);
 
 
 Route::get('/', function(){
