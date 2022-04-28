@@ -53,7 +53,7 @@
                                         <td>{{$prods->spec->name}}</td>
                                         <td>{{$prods->status}}</td>
                                         <td>{{$prods->user->branch->name}}</td>
-                                        <td>@if(Auth::user()->role == 1)<a href="edit-product/{{$prods->chasisnumber}}"> <i class="ti-pencil-alt"></i> Edit</a> <a href="/edit-product/{{$prods->id}}/delete"><i class="ti-trash"></i> Delete</a>@endif</td>
+                                        <td>@if(Auth::user()->role == 1)<a href="edit-product/{{$prods->chasisnumber}}"> <i class="ti-pencil-alt"></i> Edit</a> @if($prods->status == 'available')<a href="/edit-product/{{$prods->id}}/delete"><i class="ti-trash"></i> Delete</a> @endif @endif</td>
                                     </tr>
                                     @endforeach
 

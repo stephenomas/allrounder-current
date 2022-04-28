@@ -364,10 +364,12 @@ class UserController extends Controller
                 $saled = \Carbon\Carbon::parse($sales->created_at)->toDate();
                 if($saled >= $now  ){
                     foreach($sales->salesitem as $item){
-                        if($item->product->type == 'Motorcycle'){
-                            $todaym = $todaym + 1;
-                        }elseif($item->product->type == 'Tricycle'){
-                            $todayt = $todayt + 1;
+                        if(isset($item->product)){
+                            if($item->product->type == 'Motorcycle'){
+                                $todaym = $todaym + 1;
+                            }elseif($item->product->type == 'Tricycle'){
+                                $todayt = $todayt + 1;
+                            }
                         }
                     }
 
@@ -396,10 +398,14 @@ class UserController extends Controller
                     $saled = \Carbon\Carbon::parse($sales->created_at)->toDate();
                     if($saled >= $now  ){
                         foreach($sales->salesitem as $item){
-                            if($item->product->type == 'Motorcycle'){
-                                $todaym = $todaym + 1;
-                            }elseif($item->product->type == 'Tricycle'){
-                                $todayt = $todayt + 1;
+                            if(isset($item->product)){
+
+
+                                if($item->product->type == 'Motorcycle'){
+                                    $todaym = $todaym + 1;
+                                }elseif($item->product->type == 'Tricycle'){
+                                    $todayt = $todayt + 1;
+                                }
                             }
                         }
 
