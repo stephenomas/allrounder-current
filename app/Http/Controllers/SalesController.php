@@ -223,7 +223,8 @@ class SalesController extends Controller
         foreach($con as $co){
             $sale->salesitem()->create([
                 'product_id' => $co->associatedModel->id,
-                'note' =>$co->attributes->note
+                'note' =>$co->attributes->note,
+                'price' => $co->price
             ]);
 
             $prod = Product::where('id',$co->associatedModel->id )->first();

@@ -126,7 +126,7 @@
                                                                     <td>{{$item->product->chasisnumber}}</td>
                                                                     <td>{{$item->product->enginenumber}}</td>
                                                                     <td>{{$item->product->spec->name}}</td>
-                                                                    <td class="text-right">{{number_format($item->product->spec->price)}}</td>
+                                                                    <td class="text-right">{{number_format($item->price ?? $item->product->spec->price)}}</td>
                                                                 </tr>
                                                                 @endforeach
 
