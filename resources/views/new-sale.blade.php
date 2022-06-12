@@ -97,11 +97,12 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary waves-effect waves-light m-l-10">Add to cart</button>
 
-                            </form>                                                                      
+                            </form>
                             <?php
                             $userId =  Auth::user()->id;
                              $content = \Cart::session($userId)->getContent();
                              ?>
+                             <h4 class="text-primary ml-3">Cart: {{$content->count()}}</h4>
                             <div class="row">
                                 @foreach ($content as $con)
                                 <div class="col-lg-4">
@@ -130,7 +131,7 @@
                             <a href="buyer-details" class="btn btn-primary waves-effect waves-light m-l-10">Checkout</a><p><br></p>
                             @endif
 
-                            
+
                         </div>
                         <!-- card-body -->
                     </div>
