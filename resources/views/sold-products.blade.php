@@ -46,7 +46,7 @@
                                 <tbody>
                                     @foreach ( $prod as $prods )
                                     <tr>
-                                        <td>{{$prods->user->name}}</td>
+                                        <td>{{$prods->salesitem->sales->user->name ?? ''}}</td>
                                         <td>{{$prods->chasisnumber}}</td>
                                         <td>{{$prods->brand->name}}</td>
                                         <td>{{$prods->enginenumber}}</td>
