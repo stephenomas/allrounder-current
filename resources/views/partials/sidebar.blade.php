@@ -82,6 +82,9 @@
                         <li><a href="/view-inventory">View Inventory</a></li>
                         @endif
                         @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                        <li><a href="/sold-products">Sold products</a></li>
+                        @endif
+                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
                         <li><a href="/view-stats">View Statistics</a></li>
                         @endif
 

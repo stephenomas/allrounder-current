@@ -32,6 +32,7 @@ Route::get('/edit-product/{id}', [ProductController::class, 'edit'])->middleware
 Route::put('/edit-product/{id}', [ProductController::class, 'update'])->middleware('viewproduct');
 Route::get('/edit-product/{product}/delete', [ProductController::class, 'destroy'])->middleware('viewproduct');
 Route::get('/view-inventory', [ProductController::class, 'inventory'])->middleware('viewproduct');
+Route::get('/sold-products', [ProductController::class, 'sold'])->middleware('viewproduct');
 Route::get('/view-stats', [ProductController::class, 'stats'])->middleware('viewproduct');
 
 Route::get('/new-sale', [SalesController::class, 'create'])->middleware('newsale');

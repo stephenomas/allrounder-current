@@ -27,7 +27,7 @@ class ProductController extends Controller
             $id = Auth::user()->branch_id;
             $prod = Product::whereHas('user',  function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
-    })->get();
+            })->get();
         }
 
         return view('view-products', compact('prod'));
@@ -307,5 +307,19 @@ class ProductController extends Controller
             return response()->json();
         }
 
+    }
+
+    public function sold(){
+        if(Auth::user()->role == 1){
+            $prod = Product::where('status', 'sold')->get();
+
+        }else{
+            $id = Auth::user()->branch_id;
+            $prod = Product::whereHas('user',  function (Builder $query) {
+            $query->where('branch_id', Auth::user()->branch_id);
+            })->where('status', 'sold')->get();
+        }
+
+        return view('sold-products', compact('prod'));
     }
 }
