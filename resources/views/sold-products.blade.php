@@ -54,10 +54,10 @@
 
                                         <td>{{$prods->user->branch->name}}</td>
                                         <td>
-                                            {{$prods->salesitem->sales->name}}
+                                            {{$prods->salesitem->sales->name ?? ''}}
                                         </td>
                                         <td>
-                                            {{$prods->salesitem->sales->created_at}}
+                                            {{$prods->salesitem->sales->created_at ?? ''}}
                                         </td>
                                     </tr>
                                     @endforeach
