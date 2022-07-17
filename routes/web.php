@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CkdController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\BranchController;
@@ -101,6 +102,20 @@ Route::get('/add-number', [NumberPlateController::class, 'create'])->middleware(
 Route::post('/add-number', [NumberPlateController::class, 'store'])->middleware('addnumber');
 Route::get('/number-list', [NumberPlateController::class, 'index'])->middleware('numberlist');
 Route::get('/number-list/{id}/{numberplate}/delete', [NumberPlateController::class, 'delete'])->middleware('numberlist');
+
+Route::middleware('addproduct')->group(function (){
+    Route::get('/add-ckd', [CkdController::class, 'create']);
+    Route::post('/add-ckd', [CkdController::class, 'save']);
+});
+
+Route::middleware('viewproduct')->group(function (){
+    Route::get('/view-ckd', [CkdController::class, 'index']);
+    Route::get('/ckdhistory', [CkdController::class, 'history']);
+    Route::get('/edit-ckd/{ckd}/edit', [CkdController::class, 'edit']);
+    Route::post('/edit-ckd/{ckd}/edit', [CkdController::class, 'update']);
+    Route::get('/edit-ckd/{ckd}/delete', [CkdController::class, 'delete']);
+
+});
 
 
 require __DIR__.'/auth.php';

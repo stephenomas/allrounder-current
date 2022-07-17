@@ -56,20 +56,20 @@
 
                     <div class="form-group">
                         <div class="col-12">
-                            <input class="form-control" type="password" required="" placeholder="Password" name="password">
+                            <input class="form-control" id="myInput" type="password" required="" placeholder="Password" name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-12">
+                            <div class="d-flex flex-row-reverse ">
+                                <input type="checkbox" onclick="myFunction()">Show Password
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-12">
-                            <div class="checkbox checkbox-primary">
-                                <input id="checkbox-signup" type="checkbox">
-                                <label for="checkbox-signup">
-                                    Remember me
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+
+
 
                     <div class="form-group text-center m-t-40">
                         <div class="col-12">
@@ -84,6 +84,16 @@
         </div>
     </div>
 
+    <script>
+        function myFunction() {
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+        }
+    </script>
 
 
     <!-- jQuery  -->

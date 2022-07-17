@@ -6,7 +6,7 @@
 
         <div class="user-details">
             <div class="text-center">
-                <img src=@if (!empty(Auth::user()->photo))
+                <img style="width: 50%; height: 60%;" src=@if (!empty(Auth::user()->photo))
                 {{asset(Auth::user()->photo)}}
                 @else
                 {{asset('assets/images/users/avatar-1.jpg')}}
@@ -89,6 +89,24 @@
                         @endif
 
 
+                    </ul>
+                </li>
+                @endif
+
+
+                @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 or Auth::user()->access->viewproduct == 1 )
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout"></i><span> CKD </span><span class="float-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 )
+                        <li><a href="/add-ckd">Add CKD</a></li>
+                        @endif
+                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                        <li><a href="/view-ckd">View CKD</a></li>
+                        @endif
+                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                        <li><a href="/ckdhistory">View CKD History</a></li>
+                        @endif
                     </ul>
                 </li>
                 @endif

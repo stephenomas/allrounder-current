@@ -65,4 +65,11 @@ class User extends Authenticatable
     public function report(){
         return $this->hasMany(Report::class);
     }
+
+    public function ckd(){
+        return $this->hasMany(Ckd::class);
+    }
+    public function ckdhistory(){
+        return $this->hasMany(CkdHistory::class);
+    }
 }

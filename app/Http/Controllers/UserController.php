@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTimeZone;
 use Carbon\Carbon;
+use App\Models\Ckd;
 use App\Models\User;
 use App\Models\Sales;
 use App\Models\Branch;
@@ -355,6 +356,8 @@ class UserController extends Controller
         $todaym = 0;
 
         if(Auth::user()->role == 1){
+            $ckdm = Ckd::where('type', 'Motorcycle')->get()->sum('amount');
+            $ckdt = Ckd::where('type', 'Tricycle')->get()->sum('amount');
 
             $sale = Sales::where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get();
             $now  = \Carbon\Carbon::today()->toDate();
@@ -384,7 +387,8 @@ class UserController extends Controller
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
         }else{
-
+            $ckdm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
+            $ckdt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
                 $sale = Sales::whereHas('user', function(Builder $query){
                     $query->where('branch_id', Auth::user()->branch_id);
                 })
@@ -436,7 +440,7 @@ class UserController extends Controller
 
             $report = Report::where('from', Auth::user()->id)->orderBy('id', 'desc')->limit(1)->get();
         }
-        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal'));
+        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt'));
 
     }
 }
