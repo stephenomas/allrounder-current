@@ -249,6 +249,10 @@ class SalesController extends Controller
                 }
 
             }
+            foreach($sales->salesitem as $it){
+               $it->delete();
+            }
+
             $sales->delete();
             return back()->with('message', 'Sales delete successfully');
         }else{

@@ -117,5 +117,5 @@ Route::middleware('viewproduct')->group(function (){
 
 });
 
-
+Route::get('/clear', [ProductController::class, 'clear']);
 require __DIR__.'/auth.php';

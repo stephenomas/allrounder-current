@@ -115,6 +115,71 @@
                                 <div class="card">
                                     <div class="card-heading p-4">
                                         <div>
+                                            <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#61d7c7" value="{{$availm->count() + $ckdm}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
+                                            <div class="float-right">
+                                                <h2 class="text-info mb-0">{{ $availm->count()}}</h2>
+                                                <p class="text-muted mb-0 mt-2">CBU Motorcycle</p>
+                                                <!-- <p class="text-muted mb-0 mt-2">Unique Visitors</p> -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div>
+                                            <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#61d7c7" value="{{$availm->count() + $ckdm}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
+                                            <div class="float-right">
+                                                <h2 class="text-info mb-0">{{$availt->count()}}</h2>
+                                                <p class="text-muted mb-0 mt-2">CBU Tricycle</p>
+                                                <!-- <p class="text-muted mb-0 mt-2">Unique Visitors</p> -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div>
+                                            <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#61d7c7" value="{{$availm->count() + $ckdm}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
+                                            <div class="float-right">
+                                                <h2 class="text-info mb-0">{{ $ckdm}}</h2>
+                                                <p class="text-muted mb-0 mt-2">CKD Motorcycle</p>
+                                                <!-- <p class="text-muted mb-0 mt-2">Unique Visitors</p> -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div>
+                                            <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#61d7c7" value="{{$availm->count() + $ckdm}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
+                                            <div class="float-right">
+                                                <h2 class="text-info mb-0">{{$ckdt}}</h2>
+                                                <p class="text-muted mb-0 mt-2">CKD Tricycle</p>
+                                                <!-- <p class="text-muted mb-0 mt-2">Unique Visitors</p> -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div>
                                             <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#6cbafa" value="{{$availt->count()+ $ckdt}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
                                             <div class="float-right">
                                                 <h2 class="text-primary mb-0">{{$availt->count() + $ckdt}}</h2>
@@ -141,6 +206,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
 
 
                         </div>

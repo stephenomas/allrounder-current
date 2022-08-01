@@ -6,6 +6,7 @@ use App\Models\Spec;
 use App\Models\Brand;
 use App\Models\Branch;
 use App\Models\Product;
+use App\Models\SalesItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -322,4 +323,6 @@ class ProductController extends Controller
 
         return view('sold-products', compact('prod'));
     }
+
+    
 }
