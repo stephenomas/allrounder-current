@@ -37,11 +37,14 @@ Route::get('/sold-products', [ProductController::class, 'sold'])->middleware('vi
 Route::get('/view-stats', [ProductController::class, 'stats'])->middleware('viewproduct');
 
 Route::get('/new-sale', [SalesController::class, 'create'])->middleware('newsale');
+Route::get('/new-sale-ckd', [SalesController::class, 'ckd_view'])->middleware('newsale');
+Route::post('/new-sale-ckd', [SalesController::class, 'ckd_sale'])->middleware('newsale');
 Route::post('/addtocart', [SalesController::class, 'addcart'])->middleware('newsale');
 Route::get('/removecart/{id}', [SalesController::class, 'removecart'])->middleware('newsale');
 Route::get('/buyer-details', [SalesController::class, 'buyer'])->middleware('newsale');
 Route::post('/buyer-details', [SalesController::class, 'buyersave'])->middleware('newsale');
 Route::resource( '/sales-list',SalesController::class)->middleware('saleslist');
+Route::get( '/sales-report',[SalesController::class, 'report_index'])->middleware('saleslist');
 Route::get('/sales-list/delete/{sales}', [SalesController::class, 'delete'])->name('sales-list.delete');
 
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create')->middleware('adduser');

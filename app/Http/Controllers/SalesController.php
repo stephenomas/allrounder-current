@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 
+use Carbon\Carbon;
+use App\Models\Ckd;
+use App\Models\Spec;
 use App\Models\Sales;
+use App\Models\Branch;
 use App\Models\Product;
+use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -215,6 +220,7 @@ class SalesController extends Controller
             'address' => $request->address,
             'paymentmethod' => $request->paymentmethod,
             'paymentstatus' => $request->paymentstatus,
+            'no_of_ckd' => 0,
             'account' => $request->account,
             'unit' => $num,
             'price' => $request->price,
@@ -248,15 +254,118 @@ class SalesController extends Controller
                     ]);
                 }
 
-            }
-            foreach($sales->salesitem as $it){
-               $it->delete();
-            }
+                $items->delete();
 
+            }
+            if($sales->ckd_type != null || !empty($sales->ckd_type)){
+                $ckd = Ckd::where('name', $sales->ckd_type)->where('branch_id', Auth::user()->branch_id)->first();
+                if($ckd){
+                    $new = $ckd->amount + $sales->unit;
+                    $ckd->update([
+                        'amount' => $new
+                    ]);
+                }
+            }
             $sales->delete();
             return back()->with('message', 'Sales delete successfully');
         }else{
             return back();
         }
+    }
+
+    public function report_index(Request $request){
+        if($request->start && $request->end){
+            $end = Carbon::parse($request->end)->addDay();
+            if(Utilities::admin()){
+                $branch = $request->branch;
+                    if($request->branch == 0){
+                        $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->get();
+                    }else{
+                        $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->whereHas('user', function(Builder $query) use ($branch){
+                            $query->where('branch_id', $branch);
+                        })->get();
+                    }
+            }else{
+                $branch = Auth::user()->branch->id;
+
+                    $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->whereHas('user', function(Builder $query){
+                        $query->where('branch_id', Auth::user()->branch_id);
+                    })->get();
+            }
+        }else{
+            $sale= [];
+        }
+
+        $branch = Branch::all();
+        return view('sales-report', compact('branch', 'sale'));
+    }
+
+    public function ckd_view(){
+        $branch = Auth::user()->branch->id;
+        $specs = Spec::where('name', 'like', '%CKD%')->where('branch_id', $branch)->get();
+        return view('new-sale-ckd', compact('specs'));
+    }
+
+    public function ckd_sale(Request $request){
+         $branch = Auth::user()->branch->id;
+        $request->validate([
+            'name' => 'required',
+            'number' => 'required',
+            'address' => 'required',
+            'ckd_type' => 'required',
+            'no_of_ckd' => 'required',
+            'paymentmethod' => 'required',
+            'paymentstatus' => 'required'
+        ]);
+
+        $type = $request->ckd_type;
+        $spec = Spec::find($type);
+        $ckd = Ckd::where('name', 'like','%'.$spec->name.'%')->where('branch_id', $branch)->first();
+        if(!$ckd){
+            return back()->with('failed', 'CKD not found');
+        }elseif($ckd->amount < $request->no_of_ckd){
+            return back()->with('failed', 'Only '.$ckd->amount.' left in the system');
+        }
+        if(strpos($spec->name, 'MOTOR') || strpos($spec->name, 'Motor') || strpos($spec->name, 'motor') ){
+            $sale = Auth::user()->sales()->create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'number' => $request->number,
+                'address' => $request->address,
+                'paymentmethod' => $request->paymentmethod,
+                'paymentstatus' => $request->paymentstatus,
+                'account' => $request->account,
+                'unit' => $request->no_of_ckd,
+                'no_of_ckd' => $request->no_of_ckd,
+                'price' => $spec->price * $request->no_of_ckd,
+                'ckd_type' => $spec->name,
+                'no_of_engine' => $request->engines,
+                'no_of_bolts' => $request->bolts
+            ]);
+        }else{
+            $sale = Auth::user()->sales()->create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'number' => $request->number,
+                'address' => $request->address,
+                'paymentmethod' => $request->paymentmethod,
+                'paymentstatus' => $request->paymentstatus,
+                'account' => $request->account,
+                'unit' => $request->no_of_ckd,
+                'no_of_ckd' => $request->no_of_ckd,
+                'price' => $spec->price * $request->no_of_ckd,
+                'ckd_type' => $spec->name,
+            ]);
+        }
+        if($sale){
+            $num = $ckd->amount - $request->no_of_ckd;
+            $ckd->update([
+                'amount' => $num
+            ]);
+            return view('invoice', compact('sale'));
+        }
+
+
+
     }
 }

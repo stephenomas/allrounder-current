@@ -28,6 +28,7 @@
                                         <th>Total Price</th>
 
                                         <th>Unit</th>
+                                        {{-- <th>Sale Type</th> --}}
                                         <th>Branch</th>
                                         <th>Date</th>
                                         <th>Process</th>
@@ -47,6 +48,13 @@
                                         <td>{{number_format($sales->price)}}</td>
 
                                         <td>{{$sales->unit}}</td>
+                                        {{-- <td>
+                                            @if ($sales->ckd_type != null || !empty($sales->ckd_type))
+                                                CKD
+                                            @else
+                                                CBU
+                                            @endif
+                                        </td> --}}
                                         <td>{{$sales->user->branch->name}}</td>
                                         <td>{{$sales->created_at}}</td>
                                         <td><a href="{{route('sales-list.show', ['sales_list'=> $sales->id])}}"><i class="ti-files"></i> Invoice </a> • @if (Auth::user()->role == 1)

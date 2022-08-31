@@ -135,9 +135,16 @@
                         <li><a href="/sales-list">Sales List</a></li>
                         @endif
                         @if (Auth::user()->role == 1 or Auth::user()->access->newsale == 1 )
-                        <li><a href="/new-sale">New Sale</a></li>
+                        <li class="has_sub"><a href="javascript:void(0);" class="waves-effect">New Sale<span class="float-right"><i class="mdi mdi-plus"></i></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="/new-sale">CBU sale</a></li>
+                                <li><a href="/new-sale-ckd">CKD sale</a></li>
+                            </ul>
+                        </li>
                         @endif
-
+                        @if (Auth::user()->role == 1 or Auth::user()->access->saleslist == 1 )
+                        <li><a href="/sales-report">Sale Report</a></li>
+                        @endif
 
                     </ul>
                 </li>

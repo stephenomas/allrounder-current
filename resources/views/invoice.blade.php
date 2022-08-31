@@ -75,7 +75,7 @@
                                                             <strong>Billed To:</strong><br>
                                                             {{$sale->name}}<br>
                                                             {{$sale->address}}<br>
-
+                                                            {{$sale->number}}<br>
                                                         </address>
                                                     </div>
                                                 </div>
@@ -107,34 +107,70 @@
                                                     <div class="card-body">
                                                         <div class="table-responsive">
                                                             <table class="table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <td><strong>Brand</strong></td>
+                                                                @if(empty($sale->ckd_type) || $sale->ckd_type == null)
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <td><strong>Brand</strong></td>
 
-                                                                        <th>Chasis Number</th>
-                                                                        <th>Engine Number</th>
-                                                                        <th>Model</th>
-                                                                        <td class="text-center"><strong>Price</strong></td>
+                                                                            <th>Chasis Number</th>
+                                                                            <th>Engine Number</th>
+                                                                            <th>Model</th>
+                                                                            <td class="text-center"><strong>Price</strong></td>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    @foreach ($sale->salesitem as $item)
+                                                                    <tr>
+                                                                        <td>{{$item->product->brand->name}}</td>
+
+                                                                        <td>{{$item->product->chasisnumber}}</td>
+                                                                        <td>{{$item->product->enginenumber}}</td>
+                                                                        <td>{{$item->product->spec->name}}</td>
 
                                                                     </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                @foreach ($sale->salesitem as $item)
-                                                                <tr>
-                                                                    <td>{{$item->product->brand->name}}</td>
+                                                                    @endforeach
 
-                                                                    <td>{{$item->product->chasisnumber}}</td>
-                                                                    <td>{{$item->product->enginenumber}}</td>
-                                                                    <td>{{$item->product->spec->name}}</td>
-                                                                    <td class="text-right">{{number_format($item->price ?? $item->product->spec->price)}}</td>
-                                                                </tr>
-                                                                @endforeach
+                                                                        <tr>
+                                                                            <th>total</th>
+                                                                            <th>{{number_format($sale->price)}}</th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                @else
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <td><strong>CKD Type</strong></td>
+
+                                                                            <th> Unit</th>
+                                                                            @if($sale->no_of_engine != null || !empty($sale->no_of_engine))
+                                                                            <th>Number of Engines</th>
+                                                                            <th>Bolts & Buts</th>
+                                                                            @endif
+                                                                          
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
 
                                                                     <tr>
-                                                                        <th>total</th>
-                                                                        <th>{{number_format($sale->price)}}</th>
+                                                                        <td>{{$sale->ckd_type}}</td>
+
+                                                                        <td>{{$sale->unit}}</td>
+                                                                        @if ($sale->no_of_engine != null || !empty($sale->no_of_engine))
+                                                                        <td>{{$sale->no_of_engine}}</td>
+                                                                        <td>{{$sale->no_of_bolts}}</td>
+                                                                        @endif
+
+
                                                                     </tr>
-                                                                </tbody>
+
+
+                                                                        <tr>
+                                                                            <th>total</th>
+                                                                            <th>{{number_format($sale->price)}}</th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                @endif
                                                             </table>
                                                         </div>
 

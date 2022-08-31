@@ -57,7 +57,7 @@
                                         <div>
                                             <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#6cbafa" value="{{$soldm->count()}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
                                             <div class="float-right">
-                                                <h2 class="text-primary mb-0">{{$soldm->count()}}</h2>
+                                                <h2 class="text-primary mb-0">{{$soldm->count() + $ckdsoldm->sum('unit')}}</h2>
                                                 <p class="text-muted mb-0 mt-2">Total Motorcycle Sales</p>
                                             </div>
 
@@ -72,7 +72,7 @@
                                         <div>
                                             <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#6cbafa" value="{{$soldt->count()}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
                                             <div class="float-right">
-                                                <h2 class="text-primary mb-0">{{$soldt->count()}}</h2>
+                                                <h2 class="text-primary mb-0">{{$soldt->count()+ $ckdsoldt->sum('unit')}}</h2>
                                                 <p class="text-muted mb-0 mt-2">Total Tricycle Sales</p>
                                             </div>
 

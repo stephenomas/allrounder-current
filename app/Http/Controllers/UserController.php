@@ -354,13 +354,16 @@ class UserController extends Controller
         $sal = 0;
         $todayt = 0;
         $todaym = 0;
+        $today_ckd_m = 0;
+        $today_ckd_t = 0;
+        $now  = \Carbon\Carbon::today()->toDate();
 
         if(Auth::user()->role == 1){
             $ckdm = Ckd::where('type', 'Motorcycle')->get()->sum('amount');
             $ckdt = Ckd::where('type', 'Tricycle')->get()->sum('amount');
 
             $sale = Sales::where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get();
-            $now  = \Carbon\Carbon::today()->toDate();
+
             foreach($sale as $sales){
 
                 $sal = $sal  + $sales->unit;
@@ -378,6 +381,25 @@ class UserController extends Controller
 
                 }
             }
+            $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->get();
+            $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->get();
+
+            foreach($ckdsoldm as $m){
+                $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
+                if($sell >= $now){
+                    $today_ckd_m = $today_ckd_m + $m->unit;
+                }
+            }
+
+            foreach($ckdsoldt as $t){
+                $sell = \Carbon\Carbon::parse($t->created_at)->toDate();
+                if($sell >= $now){
+                    $today_ckd_t = $today_ckd_t + $t->unit;
+                }
+            }
+            $todaym = $todaym + $today_ckd_m;
+            $todayt = $todayt + $today_ckd_t;
+
             $prod = Product::all();
             $availm = Product::where('status', 'available')->where('type', 'motorcycle')->get();
             $availt = Product::where('status', 'available')->where('type', 'tricycle')->get();
@@ -387,8 +409,8 @@ class UserController extends Controller
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
         }else{
-            $ckdm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
-            $ckdt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
+            $ckdsoldm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
+            $ckdsoldt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
                 $sale = Sales::whereHas('user', function(Builder $query){
                     $query->where('branch_id', Auth::user()->branch_id);
                 })
@@ -415,11 +437,37 @@ class UserController extends Controller
 
                     }
                 }
-
                 $id = Auth::user()->branch_id;
+                $ckdm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($id){
+                    $query->where('branch_id', $id);
+                })->get();
+                $ckdt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($id){
+                    $query->where('branch_id', $id);
+                })->get();
+
+                foreach($ckdsoldm as $m){
+                    $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
+                    if($sell >= $now){
+                        $today_ckd_m = $today_ckd_m + $m->unit;
+                    }
+                }
+
+                foreach($ckdsoldt as $t){
+                    $sell = \Carbon\Carbon::parse($t->created_at)->toDate();
+                    if($sell >= $now){
+                        $today_ckd_t = $today_ckd_t + $t->unit;
+                    }
+                }
+                $todaym = $todaym + $today_ckd_m;
+                $todayt = $todayt + $today_ckd_t;
+
+
+
                 $prod = Product::whereHas('user', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->get();
+
+
 
             $availm = Product::whereHas('user', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
@@ -440,7 +488,7 @@ class UserController extends Controller
 
             $report = Report::where('from', Auth::user()->id)->orderBy('id', 'desc')->limit(1)->get();
         }
-        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt'));
+        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt', 'ckdsoldm', 'ckdsoldt'));
 
     }
 }

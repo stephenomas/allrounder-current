@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ckd;
+use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,8 +43,13 @@ class CkdController extends Controller
     }
 
     public function index(){
-        $branch = Auth::user()->branch->id;
-        $prod = Ckd::where('branch_id', $branch)->get();
+        if(Utilities::admin()){
+            $prod = Ckd::all();
+        }else{
+            $branch = Auth::user()->branch->id;
+            $prod = Ckd::where('branch_id', $branch)->get();
+        }
+
 
         return view('view-ckd', compact('prod'));
     }
@@ -96,7 +102,9 @@ class CkdController extends Controller
 
         if($branch == $ckd->branch_id){
 
-            $ckd->ckdhistory->delete();
+            foreach($ckd->ckdhistory as $history){
+                $history->delete();
+            }
             $ckd->delete();
             return back()->with('message', 'ckd deleted successfully');
         }else{
