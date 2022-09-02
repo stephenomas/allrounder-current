@@ -409,8 +409,8 @@ class UserController extends Controller
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
         }else{
-            $ckdsoldm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
-            $ckdsoldt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
+            $ckdm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
+            $ckdt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
                 $sale = Sales::whereHas('user', function(Builder $query){
                     $query->where('branch_id', Auth::user()->branch_id);
                 })
@@ -438,10 +438,10 @@ class UserController extends Controller
                     }
                 }
                 $id = Auth::user()->branch_id;
-                $ckdm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($id){
+                $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($id){
                     $query->where('branch_id', $id);
                 })->get();
-                $ckdt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($id){
+                $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($id){
                     $query->where('branch_id', $id);
                 })->get();
 
