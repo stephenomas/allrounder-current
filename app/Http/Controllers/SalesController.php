@@ -43,8 +43,8 @@ class SalesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $prod = Product::where('status', 'available')->get();
+    {   $branch = Auth::user()->branch_id;
+        $prod = Product::where('status', 'available')->where('branch_id', $branch)->get();
         return view('new-sale', compact('prod'));
     }
 

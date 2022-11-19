@@ -72,6 +72,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $branch = Auth::user()->branch_id;
         $mod = $request->spec_id;
         $spec = Spec::where('id', $mod)->first();
         $ch = $spec->chasisdigit;
@@ -86,7 +87,7 @@ class ProductController extends Controller
             'trampoline' => '',
             'remark' => '',
         ]);
-        $status = ['status'=>'available', 'type'=>$type];
+        $status = ['status'=>'available', 'type'=>$type, 'branch_id' => $branch];
 
         Auth::user()->product()->create(array_merge($validate, $status));
         return back()->with('message', 'Product added successfully');
@@ -324,5 +325,15 @@ class ProductController extends Controller
         return view('sold-products', compact('prod'));
     }
 
-    
+    public function populate(){
+        $products = Product::all();
+        foreach($products as $pro){
+            $branch = $pro->user->branch_id;
+            $pro->update([
+                'branch_id' => $branch
+            ]);
+        }
+    }
+
+
 }

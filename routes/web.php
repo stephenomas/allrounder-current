@@ -120,5 +120,5 @@ Route::middleware('viewproduct')->group(function (){
 
 });
 
-Route::get('/clear', [ProductController::class, 'clear']);
+// Route::get('/populate', [ProductController::class, 'populate']);
 require __DIR__.'/auth.php';
