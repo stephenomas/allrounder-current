@@ -80,7 +80,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-textarea-input">Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text"  required value="{{$ckd->name}}" disabled  name="name" class="form-control"id="example-password-input">
+                                        <input type="text"  required value="{{$ckd->spec->name}}" disabled  name="name" class="form-control"id="example-password-input">
                                     </div>
                                 </div>
                                 <div class="form-group row">

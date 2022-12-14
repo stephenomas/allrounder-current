@@ -46,7 +46,7 @@
                                     @foreach ( $mod as $mo )
                                     <tr>
                                         <td>{{$mo->name}}</td>
-                                        <td>{{$mo->brand->name}}</td>
+                                        <td>{{$mo->brand->name ?? ''}}</td>
                                         <td>{{$mo->engine}}</td>
                                         <td>{{$mo->type}}</td>
                                         <td>{{$mo->price}}</td>

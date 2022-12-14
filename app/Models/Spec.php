@@ -21,4 +21,12 @@ class Spec extends Model
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
+
+    public function ckd(){
+        return $this->hasOne(Ckd::class);
+    }
+
+    public function warehouse(){
+        return $this->hasMany(Warehouse::class);
+    }
 }

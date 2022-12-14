@@ -75,6 +75,7 @@
                         @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 )
                         <li><a href="/add-products">Add product</a></li>
                         @endif
+
                         @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
                         <li><a href="/view-products">View Products</a></li>
                         @endif
@@ -88,6 +89,24 @@
                         <li><a href="/view-stats">View Statistics</a></li>
                         @endif
 
+
+                    </ul>
+                </li>
+                @endif
+
+
+
+                @if (Auth::user()->role == 1 or Auth::user()->access->warehouse == 1 )
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout"></i><span> Warehouse Transfer </span><span class="float-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+
+                        <li><a href="/transfer-cbu">CBU Transfer</a></li>
+                        <li><a href="/transfer-ckd">CKD Transfer</a></li>
+                        <li><a href="/warehouse-transfers">Transfer History</a></li>
+                        @if (App\Helpers\Utilities::notification())
+                        <li><a href="/warehouse-incoming"><i class="ti-envelope text-danger bg-danger mr-1"></i>Incoming</a></li>
+                        @endif
 
                     </ul>
                 </li>

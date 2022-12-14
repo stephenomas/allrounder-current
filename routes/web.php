@@ -7,6 +7,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\NumberPlateController;
 
 /*
@@ -24,7 +25,6 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 Route::post('/login', [UserController::class, 'login'])->name('signin');
-
 Route::get('/add-products', [ProductController::class, 'tricyclecreate'])->middleware('addproduct');
 Route::get('/brand/{brand}/', [ProductController::class, 'brandsel'])->middleware('addproduct');
 Route::post('/add-products', [ProductController::class, 'store'])->middleware('addproduct');
@@ -117,8 +117,23 @@ Route::middleware('viewproduct')->group(function (){
     Route::get('/edit-ckd/{ckd}/edit', [CkdController::class, 'edit']);
     Route::post('/edit-ckd/{ckd}/edit', [CkdController::class, 'update']);
     Route::get('/edit-ckd/{ckd}/delete', [CkdController::class, 'delete']);
-
 });
 
+Route::middleware(['auth', 'warehouse'])->group(function(){
+    Route::get('/transfer-ckd', [WarehouseController::class, 'transfer_ckd_create']);
+    Route::post('/transfer-ckd', [WarehouseController::class, 'submit_transfer_ckd']);
+    Route::get('/transfer-cbu', [WarehouseController::class, 'transfer_cbu_create']);
+    Route::post('/transfer-cbu', [WarehouseController::class, 'submit_transfer_cbu']);
+    Route::get('/warehouse-incoming', [WarehouseController::class, 'incoming']);
+    Route::post('/warehouse-incoming', [WarehouseController::class, 'incoming_save']);
+    Route::get('/warehouse-transfers', [WarehouseController::class, 'index_transfers']);
+    Route::get('/warehouse-transfers/{warehouse}', [WarehouseController::class, 'view_transfer']);
+    Route::get('/warehouse-transfers/{warehouse}/edit', [WarehouseController::class, 'edit_transfer']);
+    Route::post('/warehouse-transfers/{warehouse}/edit', [WarehouseController::class, 'save_transfer']);
+    Route::get('/warehouse-transfers/{warehouse}/delete', [WarehouseController::class, 'delete_transfer']);
+});
+
+Route::get('/cron-jobs/sendsalereport', [SalesController::class, 'send_sales_report']);
+Route::get('/populateSales', [SalesController::class, 'populate']);
 // Route::get('/populate', [ProductController::class, 'populate']);
 require __DIR__.'/auth.php';

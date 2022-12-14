@@ -14,4 +14,8 @@ class Branch extends Model
     public function user(){
         return $this->hasMany(User::class);
     }
+
+    public function warehouses(){
+        return $this->hasMany(Warehouse::class);
+    }
 }

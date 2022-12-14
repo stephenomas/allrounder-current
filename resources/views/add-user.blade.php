@@ -118,63 +118,98 @@
                                             <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Pages Given access to</label>
                                                     <div class="checkbox checkbox-primary checkbox-circle">
+
                                                         <input name="superadmin" value="1" id="checkbox-25" type="checkbox">
                                                         <label for="checkbox-25">
                                                                 Super admin
                                                             </label><br>
                                                             <h4>Normal User</h4>
-                                                        <input name="dashboard" value="1" id="checkbox-9" type="checkbox">
-                                                        <label for="checkbox-9">
-                                                                Dashboard
-                                                            </label>
-                                                           <br> <input name="addproduct" value="1" id="checkbox-10" type="checkbox">
-                                                        <label for="checkbox-10">
-                                                                Add Product
-                                                            </label>
-                                                           <br> <input name="viewproduct" value="1" id="checkbox-11" type="checkbox">
-                                                        <label for="checkbox-11">
-                                                                View Product
-                                                            </label>
-                                                            <br><input name="saleslist" value="1" id="checkbox-12" type="checkbox">
-                                                        <label for="checkbox-12">
-                                                                Sales List
-                                                            </label>
-                                                            <br><input name="newsale" value="1" id="checkbox-13" type="checkbox">
-                                                        <label for="checkbox-13">
-                                                                New Sale
-                                                            </label>
-                                                            <br><input name="adduser" value="1" id="checkbox-14" type="checkbox">
-                                                        <label for="checkbox-14">
-                                                                Add User
-                                                            </label>
-                                                            <br> <input name="viewuser" value="1" id="checkbox-15" type="checkbox">
-                                                        <label for="checkbox-15">
-                                                                View Users
-                                                            </label>
-                                                            <br> <input name="addbranch" value="1" id="checkbox-16" type="checkbox">
-                                                        <label for="checkbox-16">
-                                                                    Add Branch
-                                                            </label>
-                                                            <br> <input name="viewbranch" value="1" id="checkbox-17" type="checkbox">
-                                                        <label for="checkbox-17">
-                                                                  View Branch
-                                                            </label>
-                                                            <br> <input name="addreport" value="1" id="checkbox-18" type="checkbox">
-                                                            <label for="checkbox-18">
-                                                                Add Report
-                                                            </label>
-                                                            <br> <input name="viewreport" value="1" id="checkbox-19" type="checkbox">
-                                                        <label for="checkbox-19">
-                                                                    View Report
-                                                         </label>
-                                                         <br> <input name="addnumber" value="1" id="checkbox-20" type="checkbox">
-                                                         <label for="checkbox-20">
-                                                                     Add number plate
-                                                          </label>
-                                                          <br> <input name="numberlist" value="1" id="checkbox-21" type="checkbox">
-                                                          <label for="checkbox-21">
-                                                                      View Number Plates
-                                                           </label>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <input name="dashboard" value="1" id="checkbox-9" type="checkbox">
+                                                                    <label for="checkbox-9">
+                                                                           View Dashboard
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="addproduct" value="1" id="checkbox-10" type="checkbox">
+                                                                    <label for="checkbox-10">
+                                                                            Add Product
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="viewproduct" value="1" id="checkbox-11" type="checkbox">
+                                                                    <label for="checkbox-11">
+                                                                            View Product
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="saleslist" value="1" id="checkbox-12" type="checkbox">
+                                                                    <label for="checkbox-12">
+                                                                            Sales List
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="newsale" value="1" id="checkbox-13" type="checkbox">
+                                                                    <label for="checkbox-13">
+                                                                            New Sale
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="adduser" value="1" id="checkbox-14" type="checkbox">
+                                                                    <label for="checkbox-14">
+                                                                            Add User
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="viewuser" value="1" id="checkbox-15" type="checkbox">
+                                                                    <label for="checkbox-15">
+                                                                            View Users
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="addbranch" value="1" id="checkbox-16" type="checkbox">
+                                                                    <label for="checkbox-16">
+                                                                                Add Branch
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="viewbranch" value="1" id="checkbox-17" type="checkbox">
+                                                                    <label for="checkbox-17">
+                                                                              View Branch
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="addreport" value="1" id="checkbox-18" type="checkbox">
+                                                                    <label for="checkbox-18">
+                                                                        Add Report
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="viewreport" value="1" id="checkbox-19" type="checkbox">
+                                                                    <label for="checkbox-19">
+                                                                                View Report
+                                                                     </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="addnumber" value="1" id="checkbox-20" type="checkbox">
+                                                                    <label for="checkbox-20">
+                                                                                Add number plate
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="numberlist" value="1" id="checkbox-21" type="checkbox">
+                                                                    <label for="checkbox-21">
+                                                                                View Number Plates
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input name="warehouse" value="1" id="checkbox-22" type="checkbox">
+                                                                    <label for="checkbox-22">
+                                                                                Warehouse Transfer
+                                                                    </label>
+                                                                </div>
+                                                            </div>
                                                     </div>
                                             </div>
 

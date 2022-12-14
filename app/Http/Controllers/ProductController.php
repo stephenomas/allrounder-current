@@ -295,6 +295,7 @@ class ProductController extends Controller
 
     public function deletemodel(Spec $spec)
     {   $spec->product->delete();
+        $spec->ckd->delete();
         $spec->delete();
        return back()->with('message', 'Model deleted successfully');
     }

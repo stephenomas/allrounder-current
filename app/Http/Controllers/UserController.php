@@ -115,6 +115,7 @@ class UserController extends Controller
                 'viewbranch' => $request->viewbranch,
                 'addreport' => $request->addreport,
                 'viewreport' => $request->viewreport,
+                'warehouse' => $request->warehouse,
 
             ]);
         }
@@ -349,8 +350,6 @@ class UserController extends Controller
 
 
     public function dashboard(){
-
-
         $sal = 0;
         $todayt = 0;
         $todaym = 0;
@@ -411,9 +410,10 @@ class UserController extends Controller
         }else{
             $ckdm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
             $ckdt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
-                $sale = Sales::whereHas('user', function(Builder $query){
-                    $query->where('branch_id', Auth::user()->branch_id);
-                })
+            // $sale = Sales::whereHas('user', function(Builder $query){
+            //     $query->where('branch_id', Auth::user()->branch_id);
+            // })
+                $sale = Sales::where('branch_id', Auth::user()->branch_id)
                 ->where('paymentstatus', 'Paid')
                 ->orWhere('paymentstatus', 'Pending')->get();
 
@@ -438,12 +438,8 @@ class UserController extends Controller
                     }
                 }
                 $id = Auth::user()->branch_id;
-                $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($id){
-                    $query->where('branch_id', $id);
-                })->get();
-                $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($id){
-                    $query->where('branch_id', $id);
-                })->get();
+                $ckdsoldm = Sales::where('spec_type', 'like', '%motor%')->where('branch_id', $id)->get();
+                $ckdsoldt = Sales::where('spec_type', 'like', '%tric%')->where('branch_id', $id)->get();
 
                 foreach($ckdsoldm as $m){
                     $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
@@ -462,7 +458,7 @@ class UserController extends Controller
                 $todayt = $todayt + $today_ckd_t;
 
 
-
+                
                 $prod = Product::whereHas('user', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->get();

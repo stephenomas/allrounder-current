@@ -47,9 +47,15 @@
                             <form method="POST" action="/add-ckd" class="form-horizontal">
                                 @csrf
                                 <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="example-textarea-input">Name</label>
+                                    <label class="col-sm-2 control-label" for="example-password-input">Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" value="{{old('Name')}}" required  name="name" class="form-control" placeholder="e.g bajaj boxer" id="example-password-input">
+                                        <select name="name" required class="select2 form-control modelsel" id="product" searchable="Search here..">
+                                            @foreach ( $specs as $spec)
+                                            <option value="{{$spec->id}}">{{$spec->name}}</option>
+                                            @endforeach
+
+
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -61,7 +67,7 @@
                                         </select>
                                     </div>
                                 </div>
-
+                                    
 
 
                                 <div class="form-group row">

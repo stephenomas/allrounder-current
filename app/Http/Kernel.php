@@ -82,5 +82,6 @@ class Kernel extends HttpKernel
         'viewmodel' => \App\Http\Middleware\viewmodel::class,
         'addnumber' => \App\Http\Middleware\addnumber::class,
         'numberlist' => \App\Http\Middleware\numberlist::class,
+        'warehouse' => \App\Http\Middleware\warehouseMiddleware::class,
     ];
 }

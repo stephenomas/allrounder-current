@@ -72,4 +72,8 @@ class User extends Authenticatable
     public function ckdhistory(){
         return $this->hasMany(CkdHistory::class);
     }
+
+    public function warehouses(){
+        return $this->hasMany(Warehouse::class);
+    }
 }

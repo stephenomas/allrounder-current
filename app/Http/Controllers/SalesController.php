@@ -9,9 +9,11 @@ use App\Models\Spec;
 use App\Models\Sales;
 use App\Models\Branch;
 use App\Models\Product;
+use App\Mail\SalesReport;
 use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Builder;
 
 class SalesController extends Controller
@@ -211,6 +213,7 @@ class SalesController extends Controller
     public function buyersave(Request $request)
     {
         $userId = Auth::user()->id;
+        $branch = Auth::user()->branch->id;
         $con = \Cart::session($userId)->getContent();
         $num = \Cart::session($userId)->getContent()->count();
         $sale = Auth::user()->sales()->create([
@@ -224,9 +227,11 @@ class SalesController extends Controller
             'account' => $request->account,
             'unit' => $num,
             'price' => $request->price,
+            'branch_id' => $branch
         ]);
 
         foreach($con as $co){
+
             $sale->salesitem()->create([
                 'product_id' => $co->associatedModel->id,
                 'note' =>$co->attributes->note,
@@ -258,12 +263,16 @@ class SalesController extends Controller
 
             }
             if($sales->ckd_type != null || !empty($sales->ckd_type)){
-                $ckd = Ckd::where('name', $sales->ckd_type)->where('branch_id', Auth::user()->branch_id)->first();
-                if($ckd){
-                    $new = $ckd->amount + $sales->unit;
-                    $ckd->update([
-                        'amount' => $new
-                    ]);
+                $spec =  Spec::where('name', $sales->ckd_type)->where('branch_id', Auth::user()->branch_id)->first();
+
+                if($spec){
+                    $ckd = $spec->ckd;
+                    if($ckd){
+                        $new = $ckd->amount + $sales->unit;
+                        $ckd->update([
+                            'amount' => $new
+                        ]);
+                    }
                 }
             }
             $sales->delete();
@@ -320,13 +329,12 @@ class SalesController extends Controller
 
         $type = $request->ckd_type;
         $spec = Spec::find($type);
-        $ckd = Ckd::where('name', 'like','%'.$spec->name.'%')->where('branch_id', $branch)->first();
+        $ckd = Ckd::where('spec_id', $spec->id)->first();
         if(!$ckd){
             return back()->with('failed', 'CKD not found');
         }elseif($ckd->amount < $request->no_of_ckd){
             return back()->with('failed', 'Only '.$ckd->amount.' left in the system');
         }
-        if(strpos($spec->name, 'MOTOR') || strpos($spec->name, 'Motor') || strpos($spec->name, 'motor') ){
             $sale = Auth::user()->sales()->create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -340,23 +348,10 @@ class SalesController extends Controller
                 'price' => $spec->price * $request->no_of_ckd,
                 'ckd_type' => $spec->name,
                 'no_of_engine' => $request->engines,
-                'no_of_bolts' => $request->bolts
+                'no_of_bolts' => $request->bolts,
+                'spec_type' => $spec->type,
+                'branch_id' => $branch
             ]);
-        }else{
-            $sale = Auth::user()->sales()->create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'number' => $request->number,
-                'address' => $request->address,
-                'paymentmethod' => $request->paymentmethod,
-                'paymentstatus' => $request->paymentstatus,
-                'account' => $request->account,
-                'unit' => $request->no_of_ckd,
-                'no_of_ckd' => $request->no_of_ckd,
-                'price' => $spec->price * $request->no_of_ckd,
-                'ckd_type' => $spec->name,
-            ]);
-        }
         if($sale){
             $num = $ckd->amount - $request->no_of_ckd;
             $ckd->update([
@@ -365,7 +360,117 @@ class SalesController extends Controller
             return view('invoice', compact('sale'));
         }
 
+    }
 
+
+
+
+    public function send_sales_report(){
+        $now  = \Carbon\Carbon::today()->toDate();
+        $nowstring = \Carbon\Carbon::today()->toDateString();
+        $branches = Branch::all();
+        $reports = [];
+
+        foreach($branches as $branch){
+            $todaym = 0;
+            $todayt = 0;
+            $today_ckd_m = 0;
+            $today_ckd_t = 0;
+            $amount = 0;
+            $sale_cbu = 0;
+            $sale_ckdm = 0;
+            $sale_ckdt = 0;
+            $sale = Sales::whereHas('user', function(Builder $query) use($branch){
+                $query->where('branch_id', $branch->id);
+            })
+            ->where('paymentstatus', 'Paid')
+            ->orWhere('paymentstatus', 'Pending')->get();
+            foreach($sale as $sales){
+                $saled = \Carbon\Carbon::parse($sales->created_at)->toDate();
+                if($saled >= $now  ){
+                    $sale_cbu = $sale_cbu + $sales->price;
+                    foreach($sales->salesitem as $item){
+                        if(isset($item->product)){
+                            if($item->product->type == 'Motorcycle'){
+                                $todaym = $todaym + 1;
+                            }elseif($item->product->type == 'Tricycle'){
+                                $todayt = $todayt + 1;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($branch){
+                $query->where('branch_id', $branch->id);
+            })->get();
+            $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($branch){
+                $query->where('branch_id', $branch->id);
+            })->get();
+
+            foreach($ckdsoldm as $m){
+                $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
+                if($sell >= $now){
+                    $sale_ckdm = $sale_ckdm + $m->price;
+                    $today_ckd_m = $today_ckd_m + $m->unit;
+                }
+            }
+
+            foreach($ckdsoldt as $t){
+                $sell = \Carbon\Carbon::parse($t->created_at)->toDate();
+                if($sell >= $now){
+                    $sale_ckdt = $sale_ckdt + $t->price;
+                    $today_ckd_t = $today_ckd_t + $t->unit;
+                }
+            }
+            $todaym = $todaym + $today_ckd_m;
+            $todayt = $todayt + $today_ckd_t;
+
+            $amount = $sale_cbu + $sale_ckdm + $sale_ckdt;
+
+            $reports = array_merge($reports, [[
+                "branch" => $branch->name,
+                "motorcycles" => $todaym,
+                "tricycles" => $todayt,
+                "amount" => $amount,
+                "date" => $nowstring
+            ]]);
+        }
+
+        Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new SalesReport($reports));
+    }
+
+    public function populate(){
+        $sales = Sales::all();
+        foreach($sales as $sale){
+            $id = $sale->user->branch_id;
+            $sale->update([
+                'branch_id' => $id
+            ]);
+            if($sale->ckd_type != null){
+                $spec = Spec::where('name', $sale->ckd_type)->where('branch_id', $id)->first();
+                if($spec){
+                    $sale->update([
+                        'spec_type' => $spec->type
+                    ]);
+                }
+            }
+
+
+        }
+        $ckds = Ckd::all();
+        foreach($ckds as $ckd){
+            $spec= Spec::where('name', $ckd->name)->where('branch_id', $ckd->branch_id)->first();
+            if($spec){
+                $ckd->update([
+                    'spec_id' => $spec->id
+                ]);
+            }
+
+        }
+        dd($sales);
 
     }
 }
+

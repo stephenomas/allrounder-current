@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ckd;
+use App\Models\Spec;
 use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class CkdController extends Controller
 {
     public function create(){
-        return view('add-ckd');
+        $user = Auth::user();
+        $specs = Spec::where('branch_id',$user->branch->id)->where(function($query) use ($user){
+            $query->where('name', 'like', '%ckd%')->orWhere('name', 'like', '%CKD%');
+        })->get();
+        return view('add-ckd', compact('specs'));
     }
 
     public function save(Request $request){
@@ -18,13 +23,13 @@ class CkdController extends Controller
         $branch = Auth::user()->branch->id;
         $name = $request->name;
 
-        $ckd = Ckd::where('name', $name)->where('branch_id', $branch)->first();
+        $ckd = Ckd::where('spec_id', $name)->where('branch_id', $branch)->first();
 
         if($ckd){
             return back()->with('error', 'Ckd already Exists');
         }else{
             $new =  Ckd::create([
-                'name' => $name,
+                'spec_id' => $name,
                 'user_id' => $user,
                 'type' => $request->type,
                 'branch_id' => $branch,
@@ -101,7 +106,6 @@ class CkdController extends Controller
         $branch = Auth::user()->branch->id;
 
         if($branch == $ckd->branch_id){
-
             foreach($ckd->ckdhistory as $history){
                 $history->delete();
             }

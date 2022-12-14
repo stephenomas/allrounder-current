@@ -127,7 +127,7 @@
                                                                         <td>{{$item->product->chasisnumber}}</td>
                                                                         <td>{{$item->product->enginenumber}}</td>
                                                                         <td>{{$item->product->spec->name}}</td>
-
+                                                                        <td>{{$item->price}}</td>
                                                                     </tr>
                                                                     @endforeach
 
@@ -146,7 +146,7 @@
                                                                             <th>Number of Engines</th>
                                                                             <th>Bolts & Buts</th>
                                                                             @endif
-                                                                          
+
 
                                                                         </tr>
                                                                     </thead>

@@ -33,6 +33,9 @@
                                     <tr>
 
                                         <th>Name</th>
+                                        @if (App\Helpers\Utilities::admin())
+                                        <th>Branch</th>
+                                        @endif
                                         <th>Type</th>
                                         <th>Amount</th>
                                         <th>Process</th>
@@ -43,7 +46,10 @@
                                 <tbody>
                                     @foreach ( $prod as $prods )
                                     <tr>
-                                        <td>{{$prods->name}}</td>
+                                        <td>{{$prods->spec->name}}</td>
+                                        @if (App\Helpers\Utilities::admin())
+                                        <th>{{$prods->branch->name}}</th>
+                                        @endif
                                         <td>{{$prods->type}}</td>
                                         <td>{{$prods->amount}}</td>
                                         <td><a href="edit-ckd/{{$prods->id}}/edit"><i class="ti-pencil-alt"></i> Edit</a> <a href="/edit-ckd/{{$prods->id}}/delete"><i class="ti-trash"></i> Delete</a></td>

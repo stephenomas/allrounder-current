@@ -44,10 +44,17 @@
                     <div class="page-header-title">
                         <h4 class="page-title">Dashboard</h4>
                     </div>
+
                 </div>
 
                 <div class="page-content-wrapper ">
+                    @if (App\Helpers\Utilities::notification())
+                    <div class="alert alert-danger alert-dismissible bg-danger text-light" role="alert">
 
+                            Please Accept Pending Incoming Request From Warehouse
+                             <br>
+                    </div>
+                 @endif
                     <div class="container-fluid">
 
                         <div class="row">

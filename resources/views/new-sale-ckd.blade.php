@@ -68,8 +68,6 @@
                                             @foreach ( $specs as $spec)
                                                 <option value="{{$spec->id}}">{{$spec->name}}</option>
                                             @endforeach
-
-
                                         </select>
                                     </div>
                                 </div>
