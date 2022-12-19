@@ -55,7 +55,7 @@ class UserController extends Controller
                 'name' => '',
                 'email' => '',
                 'password' => 'confirmed',
-                'phone' => "numeric",
+                'phone' => "unique:users",
                 'branch' => ''
 
             ]);
@@ -231,6 +231,7 @@ class UserController extends Controller
             'viewbranch' => $request->viewbranch,
             'addreport' => $request->addreport,
             'viewreport' => $request->viewreport,
+            'warehouse' => $request->warehouse
 
             ]);
 
@@ -458,26 +459,26 @@ class UserController extends Controller
                 $todayt = $todayt + $today_ckd_t;
 
 
-                
-                $prod = Product::whereHas('user', function (Builder $query) {
+
+                $prod = Product::whereHas('spec', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->get();
 
 
 
-            $availm = Product::whereHas('user', function (Builder $query) {
+            $availm = Product::whereHas('spec', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->where('status', 'available')->where('type', 'motorcycle')->get();
 
-            $availt = Product::whereHas('user', function (Builder $query) {
+            $availt = Product::whereHas('spec', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->where('status', 'available')->where('type', 'tricycle')->get();
 
-            $soldm = Product::whereHas('user', function (Builder $query) {
+            $soldm = Product::whereHas('spec', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->where('status', 'sold')->where('type', 'motorcycle')->get();
 
-            $soldt =  Product::whereHas('user', function (Builder $query) {
+            $soldt =  Product::whereHas('spec', function (Builder $query) {
                 $query->where('branch_id', Auth::user()->branch_id);
             })->where('status', 'sold')->where('type', 'tricycle')->get();
 

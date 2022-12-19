@@ -174,7 +174,11 @@
                                                                 </label>
                                                                 <br> <input name="numberlist" @if ($user->access->numberlist == 1) checked  @endif value="1" id="checkbox-21" type="checkbox">
                                                             <label for="checkbox-21">
-                                                                    View Number Lists 
+                                                                    View Number Lists
+                                                            </label>
+                                                            <br> <input name="warehouse" @if ($user->access->warehouse == 1) checked  @endif value="1" id="checkbox-22" type="checkbox">
+                                                            <label for="checkbox-22">
+                                                                    Warehouse
                                                             </label>
                                                     </div>
                                             </div>

@@ -25,6 +25,9 @@ class Warehouse extends Model
         return $this->belongsTo(Spec::class, 'ckd_type');
     }
 
+    public function receiver(){
+        return $this->belongsTo(User::class, 'receiver_id');
 
+    }
 }
 

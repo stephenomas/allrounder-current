@@ -148,7 +148,8 @@ class WarehouseController extends Controller
                 $current++;
             }
             $package->update([
-                'status' => 'fufilled'
+                'status' => 'fufilled',
+                'receiver_id' => Auth::user()->id
             ]);
             return back()->with('success', 'Accepted successfully');
         }else{
@@ -161,7 +162,8 @@ class WarehouseController extends Controller
                 'amount' => $amount
             ]);
             $package->update([
-                'status' => 'fufilled'
+                'status' => 'fufilled',
+                'receiver_id' => Auth::user()->id
             ]);
             return back()->with('success', 'Accepted successfully');
         }
@@ -174,14 +176,26 @@ class WarehouseController extends Controller
         return view('warehouse-history', compact('transfers'));
     }
 
-    public function view_transfer(Warehouse $warechouse){
-
-
+    public function view_transfer(Warehouse $warehouse){
+        $user = Auth::user();
+        if($warehouse->destination_id != $user->branch_id && $warehouse->branch_id != $user->branch_id && !Utilities::admin()){
+            return back();
+        }
+        return view('view-warehouse-transfer', compact('warehouse'));
     }
 
     public function edit_transfer(Warehouse $warehouse){
+        $user = Auth::user();
+        if($warehouse->status != 'pending'){
+            return back();
+        }
+        if(!Utilities::admin() && $user->branch_id != $warehouse->branch_id ){
+            return back();
+        }
         $branch = $this->get_branch();
         $branches = $branch['branches'];
+        $view = $warehouse->ckd == null ? 'edit-warehouse-cbu' : 'edit-warehouse-ckd';
+        return view($view, compact('branches', 'warehouse'));
     }
 
     public function delete_transfer(Warehouse $warehouse){
@@ -189,7 +203,7 @@ class WarehouseController extends Controller
             return back();
         }
         if(!Utilities::admin()){
-            if(Auth()->user->branch->id !== $warehouse->branch->id){
+            if(Auth()->branch->id !== $warehouse->branch->id){
                 return back();
             }
         }
@@ -219,4 +233,34 @@ class WarehouseController extends Controller
         }
     }
 
+    public function save_transfer(Warehouse $warehouse, Request $request){
+        if($warehouse->cbu != null && $warehouse->cbu != ''){
+            if($warehouse->destination_id != $request->branch){
+                $warehouse->update([
+                    'destination_id' => $request->branch,
+                ]);
+                return back()->with('success', 'Transfer Updated Successfully');
+            }else{
+                return back();
+            }
+
+        }else{
+            if($warehouse->no_of_ckd != $request->no_of_ckd){
+                $warehouse->spec->ckd->update([
+                    'amount' => ($warehouse->spec->ckd->amount + $warehouse->no_of_ckd) - $request->no_of_ckd
+                ]);
+            }
+            $warehouse->update([
+                'destination_id' => $request->branch,
+                'no_of_ckd' => $request->no_of_ckd,
+                'no_of_bolts' => $request->bolts,
+                'no_of_engine' => $request->engines
+            ]);
+
+            return back()->with('success', 'Transfer updated successfully');
+        }
+
+    }
+
 }
+

@@ -81,8 +81,8 @@
                                                             <span class="text-primary float-right dropdown show">
                                                                 <i class="ti-more dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#custom-width-modal">Apply Spec ID to Group</a>
-                                                                    <a class="dropdown-item" href="#">View All Items in Group</a>
+
+                                                                    <a class="dropdown-item" href="/warehouse-transfers/{{$package->id}}">View All Items in Group</a>
                                                                 </div>
                                                             </span>
                                                         </h4>

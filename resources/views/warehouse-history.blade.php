@@ -63,10 +63,11 @@
                                         <td>{{$transfer->status == "fufilled" ? $transfer->updated_at : 'TBD'}}</td>
 
                                         <td>
-                                            <a href=""><i class="ti-files"></i> View </a> •
+                                            <a href="/warehouse-transfers/{{$transfer->id}}"><i class="ti-files"></i> View </a> •
 
-                                            <a href=""> <i class="ti-ruler-pencil"></i>Edit</a>
+
                                             @if ($transfer->status != 'fufilled')
+                                            <a href="/warehouse-transfers/{{$transfer->id}}/edit"> <i class="ti-ruler-pencil"></i>Edit</a>
                                             <a href="/warehouse-transfers/{{$transfer->id}}/delete"> <i class="ti-trash"></i>Delete</a>
                                             @endif
 

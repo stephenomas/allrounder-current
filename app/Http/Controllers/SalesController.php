@@ -30,10 +30,7 @@ class SalesController extends Controller
         if($role == 1){
             $sale = Sales::orderBy('id', 'desc')->get();
         }else{
-            $sale = Sales::whereHas('user', function(Builder $query){
-                $query->where('branch_id', Auth::user()->branch_id);
-            })
-            ->orderBy('id', 'desc')->get();
+            $sale = Sales::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
         }
 
         return view('sales-list', compact('sale'));
@@ -46,7 +43,9 @@ class SalesController extends Controller
      */
     public function create()
     {   $branch = Auth::user()->branch_id;
-        $prod = Product::where('status', 'available')->where('branch_id', $branch)->get();
+        $prod = Product::where('status', 'available')->whereHas('spec',function(Builder $query) use ($branch){
+            $query->where('branch_id', $branch);
+        })->get();
         return view('new-sale', compact('prod'));
     }
 
@@ -164,6 +163,9 @@ class SalesController extends Controller
 
     public function addcart(Request $request){
         $Product = Product::where('chasisnumber', $request->product)->first();
+        if(!$Product){
+            return back();
+        }
         $price  = $Product->spec->price;
         $userID = Auth::user()->id;
         \Cart::session($userID)->add(array(
@@ -290,16 +292,12 @@ class SalesController extends Controller
                     if($request->branch == 0){
                         $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->get();
                     }else{
-                        $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->whereHas('user', function(Builder $query) use ($branch){
-                            $query->where('branch_id', $branch);
-                        })->get();
+                        $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->where('branch_id', $branch)->get();
                     }
             }else{
                 $branch = Auth::user()->branch->id;
 
-                    $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->whereHas('user', function(Builder $query){
-                        $query->where('branch_id', Auth::user()->branch_id);
-                    })->get();
+                    $sale = Sales::where('created_at', '>=', $request->start)->where('created_at', '<=', $end)->where('branch_id', Auth::user()->branch_id)->get();
             }
         }else{
             $sale= [];
@@ -366,8 +364,9 @@ class SalesController extends Controller
 
 
     public function send_sales_report(){
-        $now  = \Carbon\Carbon::today()->toDate();
+        $now  =\Carbon\Carbon::today()->toDateString();
         $nowstring = \Carbon\Carbon::today()->toDateString();
+
         $branches = Branch::all();
         $reports = [];
 
@@ -377,18 +376,19 @@ class SalesController extends Controller
             $today_ckd_m = 0;
             $today_ckd_t = 0;
             $amount = 0;
-            $sale_cbu = 0;
-            $sale_ckdm = 0;
-            $sale_ckdt = 0;
-            $sale = Sales::whereHas('user', function(Builder $query) use($branch){
-                $query->where('branch_id', $branch->id);
+            $today_sale = 0;
+
+            $sale = Sales::where('branch_id', $branch->id)
+            ->where(function($query){
+                $query->where('paymentstatus', 'Paid')
+                ->orWhere('paymentstatus', 'Pending');
             })
-            ->where('paymentstatus', 'Paid')
-            ->orWhere('paymentstatus', 'Pending')->get();
+            ->get();
             foreach($sale as $sales){
-                $saled = \Carbon\Carbon::parse($sales->created_at)->toDate();
-                if($saled >= $now  ){
-                    $sale_cbu = $sale_cbu + $sales->price;
+                $saled = \Carbon\Carbon::parse($sales->created_at)->toDateString();
+
+                if($saled == $nowstring){
+                    $today_sale =   $today_sale + $sales->price;
                     foreach($sales->salesitem as $item){
                         if(isset($item->product)){
                             if($item->product->type == 'Motorcycle'){
@@ -402,41 +402,38 @@ class SalesController extends Controller
                 }
             }
 
-            $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->whereHas('user', function(Builder $query) use($branch){
-                $query->where('branch_id', $branch->id);
-            })->get();
-            $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->whereHas('user', function(Builder $query) use($branch){
-                $query->where('branch_id', $branch->id);
-            })->get();
-
+            $ckdsoldm = Sales::where('spec_type', 'like', '%motor%')->where('branch_id', $branch->id)->get();
+            $ckdsoldt = Sales::where('spec_type', 'like', '%tric%')->where('branch_id', $branch->id)->get();
             foreach($ckdsoldm as $m){
-                $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
-                if($sell >= $now){
-                    $sale_ckdm = $sale_ckdm + $m->price;
+                $sell = \Carbon\Carbon::parse($m->created_at)->toDateString();
+                if($sell == $now){
+
                     $today_ckd_m = $today_ckd_m + $m->unit;
                 }
             }
 
             foreach($ckdsoldt as $t){
-                $sell = \Carbon\Carbon::parse($t->created_at)->toDate();
-                if($sell >= $now){
-                    $sale_ckdt = $sale_ckdt + $t->price;
+                $sell = \Carbon\Carbon::parse($t->created_at)->toDateString();
+                if($sell == $now){
+
                     $today_ckd_t = $today_ckd_t + $t->unit;
                 }
             }
             $todaym = $todaym + $today_ckd_m;
             $todayt = $todayt + $today_ckd_t;
 
-            $amount = $sale_cbu + $sale_ckdm + $sale_ckdt;
+
 
             $reports = array_merge($reports, [[
                 "branch" => $branch->name,
                 "motorcycles" => $todaym,
                 "tricycles" => $todayt,
-                "amount" => $amount,
+                "amount" => $today_sale,
                 "date" => $nowstring
             ]]);
         }
+
+
 
         Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new SalesReport($reports));
     }

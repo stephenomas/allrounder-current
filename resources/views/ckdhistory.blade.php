@@ -44,7 +44,7 @@
                                 <tbody>
                                     @foreach ( $prod as $prods )
                                     <tr>
-                                        <td>{{$prods->ckd->name}}</td>
+                                        <td>{{$prods->ckd->spec->name}}</td>
                                         <td>{{$prods->user->name}}</td>
                                         <td>{{$prods->amount}}</td>
                                         <td>{{$prods->action ? 'Added' : 'Removed'}}</td>

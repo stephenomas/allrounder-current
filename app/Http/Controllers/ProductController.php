@@ -26,7 +26,7 @@ class ProductController extends Controller
 
         }else{
             $id = Auth::user()->branch_id;
-            $prod = Product::whereHas('user',  function (Builder $query) {
+            $prod = Product::whereHas('spec',  function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
             })->get();
         }
@@ -40,7 +40,7 @@ class ProductController extends Controller
 
         }else{
             $id = Auth::user()->branch_id;
-        $prod = Product::whereHas('user', function (Builder $query) {
+        $prod = Product::whereHas('spec', function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
         })->where('status', 'available')->get();
         }
@@ -295,7 +295,11 @@ class ProductController extends Controller
 
     public function deletemodel(Spec $spec)
     {   $spec->product->delete();
+        foreach( $spec->ckdhistory as $ckd){
+            $ckd->delete();
+        }
         $spec->ckd->delete();
+
         $spec->delete();
        return back()->with('message', 'Model deleted successfully');
     }
@@ -318,7 +322,7 @@ class ProductController extends Controller
 
         }else{
             $id = Auth::user()->branch_id;
-            $prod = Product::whereHas('user',  function (Builder $query) {
+            $prod = Product::whereHas('spec',  function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
             })->where('status', 'sold')->get();
         }
