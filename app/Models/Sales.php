@@ -19,4 +19,8 @@ class Sales extends Model
         return $this->hasMany(SalesItem::class);
     }
 
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
+
 }

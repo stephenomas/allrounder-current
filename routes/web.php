@@ -134,6 +134,8 @@ Route::middleware(['auth', 'warehouse'])->group(function(){
 });
 
 Route::get('/cron-jobs/sendsalereport', [SalesController::class, 'send_sales_report']);
-
+Route::get('/mail-template', function(){
+    return view('mail.newsales-mail');
+});
 // Route::get('/populate', [ProductController::class, 'populate']);
 require __DIR__.'/auth.php';

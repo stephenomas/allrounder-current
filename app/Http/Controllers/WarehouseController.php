@@ -11,6 +11,7 @@ use App\Models\Warehouse;
 use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class WarehouseController extends Controller
 {
@@ -26,7 +27,9 @@ class WarehouseController extends Controller
     public function transfer_cbu_create(){
         $branchmethod = $this->get_branch();
         $branch = $branchmethod['user_branch'];
-        $prod = Product::where('status', 'available')->where('branch_id', $branch)->get();
+        $prod = Product::where('status', 'available')->whereHas('spec', function(Builder $query) use ($branch) {
+            $query->where('branch_id', $branch);
+        })->get();
         $branches =  $branchmethod['branches'];
         return view('warehouse-cbu', compact('prod', 'branches'));
     }

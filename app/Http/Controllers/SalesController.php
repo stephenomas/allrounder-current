@@ -11,6 +11,7 @@ use App\Models\Branch;
 use App\Models\Product;
 use App\Mail\SalesReport;
 use App\Helpers\Utilities;
+use App\Mail\DailySalesMaiil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -23,6 +24,8 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         $id = Auth::user()->id;
@@ -49,16 +52,6 @@ class SalesController extends Controller
         return view('new-sale', compact('prod'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -246,25 +239,27 @@ class SalesController extends Controller
             ]);
         }
         \Cart::session($userId)->clear();
+        $report = [
+            'sale' => $sale,
+            'items' => $sale->salesitem
+
+        ];
+        $status = true;
+        Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
         return view('invoice', compact('sale'));
 
     }
 
     public function delete(Sales $sales){
         $user = Auth::user();
+        $status = false;
         if($user->role == 1){
-            foreach($sales->salesitem as $items){
-                $prod = Product::where('id',$items->product_id)->first();
-                if(isset($prod)){
-                    $prod->update([
-                        'status' => 'available'
-                    ]);
-                }
-
-                $items->delete();
-
-            }
             if($sales->ckd_type != null || !empty($sales->ckd_type)){
+                $report = [
+                    'sale' => $sales,
+                    'items' => null
+
+                ];
                 $spec =  Spec::where('name', $sales->ckd_type)->where('branch_id', Auth::user()->branch_id)->first();
 
                 if($spec){
@@ -276,8 +271,23 @@ class SalesController extends Controller
                         ]);
                     }
                 }
+            }else{
+                $report = [
+                    'sale' => $sales,
+                    'items' => $sales->salesitem
+                ];
+                foreach($sales->salesitem as $items){
+                    $prod = Product::where('id',$items->product_id)->first();
+                    if(isset($prod)){
+                        $prod->update([
+                            'status' => 'available'
+                        ]);
+                    }
+                    $items->delete();
+                }
             }
             $sales->delete();
+          //  Mail::to('fewgenesis@gmail.com')->send(new DailySalesMaiil($status,$report));
             return back()->with('message', 'Sales delete successfully');
         }else{
             return back();
@@ -355,6 +365,13 @@ class SalesController extends Controller
             $ckd->update([
                 'amount' => $num
             ]);
+            $report = [
+                'sale' => $sale,
+                'items' => null
+
+            ];
+            $status = true;
+            Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
             return view('invoice', compact('sale'));
         }
 
@@ -438,36 +455,6 @@ class SalesController extends Controller
         Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new SalesReport($reports));
     }
 
-    public function populate(){
-        $sales = Sales::all();
-        foreach($sales as $sale){
-            $id = $sale->user->branch_id;
-            $sale->update([
-                'branch_id' => $id
-            ]);
-            if($sale->ckd_type != null){
-                $spec = Spec::where('name', $sale->ckd_type)->where('branch_id', $id)->first();
-                if($spec){
-                    $sale->update([
-                        'spec_type' => $spec->type
-                    ]);
-                }
-            }
 
-
-        }
-        $ckds = Ckd::all();
-        foreach($ckds as $ckd){
-            $spec= Spec::where('name', $ckd->name)->where('branch_id', $ckd->branch_id)->first();
-            if($spec){
-                $ckd->update([
-                    'spec_id' => $spec->id
-                ]);
-            }
-
-        }
-        dd($sales);
-
-    }
 }
 
