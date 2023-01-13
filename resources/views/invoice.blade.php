@@ -22,6 +22,10 @@
     border: 0;
     border-bottom: 1px solid #000;
 }
+div{
+    font-size: 16px;
+}
+
 </style>
 <body class="fixed-left">
 
@@ -56,21 +60,20 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="invoice-title">
-                                                    <h4 class="float-right">Order # {{$sale->id}}</h4>
-                                                    <h3 class="m-t-0"><img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="40"></h3>
+
                                                 </div>
                                                 <hr>
-                                                <div class="row">
-                                                    <div class="col-12">
+                                                <div class="row mt-5 pt-5">
+                                                    <div class="col-6 mt-4">
                                                         <address>
                                                             <strong>Billed By:</strong><br>
-                                                            {{$sale->user->name}} / Branch: {{$sale->user->branch->name}} Branch/ Time: {{$sale->created_at}}
+                                                            {{$sale->user->name}}<br>
+                                                            Branch: {{$sale->user->branch->name}} <br>
+                                                            Time: {{$sale->created_at}}
                                                         </address>
                                                     </div>
-                                                    <div class="col-6">
 
-                                                    </div>
-                                                    <div class="col-6 text-right">
+                                                    <div class="col-6 mt-4 text-right">
                                                         <address>
                                                             <strong>Billed To:</strong><br>
                                                             {{$sale->name}}<br>
@@ -91,7 +94,11 @@
                                                     <div class="col-6 text-right">
                                                         <address>
                                                             <strong>Order Date:</strong><br>
-                                                            {{$sale->created_at}}<br><br>
+                                                            {{$sale->created_at}}<br>
+                                                        </address>
+                                                        <address>
+                                                            <strong>Order # :</strong><br>
+                                                            {{$sale->id}}<br>
                                                         </address>
                                                     </div>
                                                 </div>

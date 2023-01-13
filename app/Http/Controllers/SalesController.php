@@ -245,7 +245,7 @@ class SalesController extends Controller
 
         ];
         $status = true;
-        Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
+        Mail::to('dan.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
         return view('invoice', compact('sale'));
 
     }
@@ -371,7 +371,7 @@ class SalesController extends Controller
 
             ];
             $status = true;
-            Mail::to('dan.allrounder@gmail.com')->cc('biz.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
+            Mail::to('dan.allrounder@gmail.com')->send(new DailySalesMaiil($status,$report));
             return view('invoice', compact('sale'));
         }
 

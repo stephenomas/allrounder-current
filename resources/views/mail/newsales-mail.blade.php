@@ -45,11 +45,11 @@
                 <div class="row mt-5">
 
                     <div class="col">
-                        <p>Branch:{{' '$sale->branch->name}}</p>
-                        <p>Billed By:{{' '$sale->user->name}}</p>
-                        <p>Billed To:{{' '$sale->name}}</p>
-                        <p>Phone Number:{{' '$sale->number}}</p>
-                        <p>Date/Time:{{' '$sale->created_at}}</p>
+                        <p>Branch:{{' '.$sale->branch->name}}</p>
+                        <p>Billed By:{{' '.$sale->user->name}}</p>
+                        <p>Billed To:{{' '.$sale->name}}</p>
+                        <p>Phone Number:{{' '.$sale->number}}</p>
+                        <p>Date/Time:{{' '.$sale->created_at}}</p>
                     </div>
                     @if ($items != null)
                     <table class="table">
