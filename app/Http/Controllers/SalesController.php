@@ -447,7 +447,7 @@ class SalesController extends Controller
                 "tricycles" => $todayt,
                 "amount" => $today_sale,
                 "date" => $nowstring
-            ]]);
+            ]]);                                                                                                                                                                                                                                                                                                                                                                                
         }
 
 
