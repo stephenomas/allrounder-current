@@ -289,7 +289,7 @@ class UserController extends Controller
             $gimages = $request->photo;
             $gbasename = Str::random();
             $goriginal = $gbasename.'.'.$gimages->getClientOriginalExtension();
-            $gimages->move(public_path('/upload'), $goriginal);
+            $gimages->move('upload/', $goriginal);
             $gimagepath = 'upload/'.$goriginal;
             // $inter = Image::make(public_path($gimagepath))->fit(1000, 1200);
             // $inter->save();
