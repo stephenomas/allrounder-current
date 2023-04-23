@@ -105,6 +105,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="example-password-input">Color</label>
+                                    <div class="col-sm-10">
+                                        <select name="color" required class="select2 form-control " searchable="Search here..">
+                                            <option value="{{$prod->color}}">{{$prod->color}}</option>
+                                            <option value="Red">Red</option>
+                                            <option value="Blue">Blue</option>
+                                            <option value="Black">Black</option>
+                                            <option value="Yellow">Yellow</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-textarea-input">Trampoline</label>
                                     <div class="col-sm-10">
                                         <input type="text" value="{{$prod->trampoline}}"  name="trampoline" class="form-control" placeholder="e.g brown" id="example-password-input">

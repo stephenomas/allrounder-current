@@ -14,7 +14,7 @@ class AddPriceProduct extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            
+            $table->string('color')->after('type')->nullable();
         });
     }
 

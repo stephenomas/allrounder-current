@@ -83,6 +83,7 @@ class ProductController extends Controller
             'chasisnumber' => 'unique:products|min:'.$ch.'|max:'.$ch.'',
             'enginenumber' => 'min:'.$en.'|max:'.$en.'',
             'engine' => '',
+            'color' => 'required',
             'spec_id' => '',
             'trampoline' => '',
             'remark' => '',
@@ -137,6 +138,7 @@ class ProductController extends Controller
                 'enginenumber' => 'min:'.$en.'',
                 'engine' => '',
                 'spec_id' => '',
+                'color' => 'required',
                 'trampoline' => '',
                 'remark' => '',
 
@@ -147,6 +149,7 @@ class ProductController extends Controller
                 'enginenumber' => 'min:'.$en.'|max:'.$en.'',
                 'brand_id' => '',
                 'engine' => '',
+                'color' => 'required',
                 'spec_id' => '',
                 'trampoline' => '',
                 'remark' => '',

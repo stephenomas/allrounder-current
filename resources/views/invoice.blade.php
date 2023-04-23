@@ -118,7 +118,7 @@ div{
                                                                     <thead>
                                                                         <tr>
                                                                             <td><strong>Brand</strong></td>
-
+                                                                            <th>Color</th>
                                                                             <th>Chasis Number</th>
                                                                             <th>Engine Number</th>
                                                                             <th>Model</th>
@@ -130,7 +130,7 @@ div{
                                                                     @foreach ($sale->salesitem as $item)
                                                                     <tr>
                                                                         <td>{{$item->product->brand->name}}</td>
-
+                                                                        <td>{{$item->product->color}}</td>
                                                                         <td>{{$item->product->chasisnumber}}</td>
                                                                         <td>{{$item->product->enginenumber}}</td>
                                                                         <td>{{$item->product->spec->name}}</td>

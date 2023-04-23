@@ -60,6 +60,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-sm-2 control-label" for="example-password-input">Color</label>
+                                    <div class="col-sm-10">
+                                        <select name="color" required class="select2 form-control " searchable="Search here..">
+                                            <option value="" disabled>Select Color</option>
+                                            <option value="Red">Red</option>
+                                            <option value="Blue">Blue</option>
+                                            <option value="Black">Black</option>
+                                            <option value="Yellow">Yellow</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-chasis">Chasis Number</label>
                                     <div class="col-sm-10">
                                         <input type="text" value="{{old('chasisnumber')}}" required name="chasisnumber" id="example-chasis" name="example-chasis" class="form-control" placeholder="e.g MD2A25BY6">
