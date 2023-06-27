@@ -130,6 +130,24 @@
                 </li>
                 @endif
 
+                {{-- @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 or Auth::user()->access->viewproduct == 1 )
+                <li class="has_sub">
+                    <a href="javascript:void(0);" class="waves-effect"><i class="ti-layout"></i><span> Bajaj Cart/Steel </span><span class="float-right"><i class="mdi mdi-plus"></i></span></a>
+                    <ul class="list-unstyled">
+                        @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 )
+                        <li><a href="/add-steel">Add Bajaj Cart/Steel</a></li>
+                        @endif
+                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                        <li><a href="/view-steel">View Bajaj Cart/Steel</a></li>
+                        @endif
+                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                        <li><a href="/steelhistory">View History</a></li>
+                        @endif
+                    </ul>
+                </li>
+                @endif --}}
+
+
                 @if (Auth::user()->role == 1 or Auth::user()->access->numberlist == 1 or Auth::user()->access->addnumber == 1 )
                 <li class="has_sub">
                     <a href="javascript:void(0);" class="waves-effect"><i class="ti-bar-chart"></i><span> Number Plate </span><span class="float-right"><i class="mdi mdi-plus"></i></span></a>

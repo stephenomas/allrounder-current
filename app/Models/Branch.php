@@ -18,4 +18,16 @@ class Branch extends Model
     public function warehouses(){
         return $this->hasMany(Warehouse::class);
     }
+
+    public function ckd(){
+        return $this->hasMany(CKD::class);
+    }
+
+    public function sales(){
+        return $this->hasMany(Sales::class);
+    }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

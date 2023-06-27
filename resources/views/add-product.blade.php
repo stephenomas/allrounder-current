@@ -64,10 +64,10 @@
                                     <div class="col-sm-10">
                                         <select name="color" required class="select2 form-control " searchable="Search here..">
                                             <option value="" disabled>Select Color</option>
-                                            <option value="Red">Red</option>
-                                            <option value="Blue">Blue</option>
-                                            <option value="Black">Black</option>
-                                            <option value="Yellow">Yellow</option>
+                                            <option value="Red">RED</option>
+                                            <option value="Blue">BLUE</option>
+                                            <option value="Black">BLACK</option>
+                                            <option value="Yellow">YELLOW</option>
 
                                         </select>
                                     </div>

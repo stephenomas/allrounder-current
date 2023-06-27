@@ -350,19 +350,21 @@ class UserController extends Controller
     }
 
 
-    public function dashboard(){
+    public function dashboard(Request $request){
         $sal = 0;
         $todayt = 0;
         $todaym = 0;
         $today_ckd_m = 0;
         $today_ckd_t = 0;
         $now  = \Carbon\Carbon::today()->toDate();
+        $branches = Branch::all();
 
         if(Auth::user()->role == 1){
-            $ckdm = Ckd::where('type', 'Motorcycle')->get()->sum('amount');
-            $ckdt = Ckd::where('type', 'Tricycle')->get()->sum('amount');
+            $branch = $request->branch && $request->branch != 0 ? Branch::findOrFail($request->branch) : false;
+            $ckdm = $branch ? $branch->ckd()->where('type', 'Motorcycle')->get()->sum('amount') : Ckd::where('type', 'Motorcycle')->get()->sum('amount');
+            $ckdt = $branch ? $branch->ckd()->where('type', 'Tricycle')->get()->sum('amount') : Ckd::where('type', 'Tricycle')->get()->sum('amount');
 
-            $sale = Sales::where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get();
+            $sale = $branch ? $branch->sales()->where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get() : Sales::where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get();
 
             foreach($sale as $sales){
 
@@ -381,8 +383,8 @@ class UserController extends Controller
 
                 }
             }
-            $ckdsoldm = Sales::where('ckd_type', 'like', '%motor%')->get();
-            $ckdsoldt = Sales::where('ckd_type', 'like', '%tric%')->get();
+            $ckdsoldm = $branch ? $branch->sales()->where('ckd_type', 'like', '%motor%')->get() : Sales::where('ckd_type', 'like', '%motor%')->get();
+            $ckdsoldt =  $branch ? $branch->sales()->where('ckd_type', 'like', '%tric%')->get() : Sales::where('ckd_type', 'like', '%tric%')->get();
 
             foreach($ckdsoldm as $m){
                 $sell = \Carbon\Carbon::parse($m->created_at)->toDate();
@@ -400,11 +402,11 @@ class UserController extends Controller
             $todaym = $todaym + $today_ckd_m;
             $todayt = $todayt + $today_ckd_t;
 
-            $prod = Product::all();
-            $availm = Product::where('status', 'available')->where('type', 'motorcycle')->get();
-            $availt = Product::where('status', 'available')->where('type', 'tricycle')->get();
-            $soldm = Product::where('status', 'sold')->where('type', 'motorcycle')->get();
-            $soldt =  Product::where('status', 'sold')->where('type', 'tricycle')->get();
+            $prod = $branch ? $branch->products : Product::all();
+            $availm =  $branch ? $branch->products()->where('status', 'available')->where('type', 'motorcycle')->get() :Product::where('status', 'available')->where('type', 'motorcycle')->get();
+            $availt = $branch ? $branch->products()->where('status', 'available')->where('type', 'tricycle')->get() : Product::where('status', 'available')->where('type', 'tricycle')->get();
+            $soldm = $branch ? $branch->products()->where('status', 'sold')->where('type', 'motorcycle')->get() : Product::where('status', 'sold')->where('type', 'motorcycle')->get();
+            $soldt =  $branch ? $branch->products()->where('status', 'sold')->where('type', 'tricycle')->get() : Product::where('status', 'sold')->where('type', 'tricycle')->get();
 
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
@@ -485,7 +487,7 @@ class UserController extends Controller
 
             $report = Report::where('from', Auth::user()->id)->orderBy('id', 'desc')->limit(1)->get();
         }
-        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt', 'ckdsoldm', 'ckdsoldt'));
+        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt', 'ckdsoldm', 'ckdsoldt', 'branches'));
 
     }
 }
