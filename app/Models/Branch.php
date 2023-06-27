@@ -20,7 +20,7 @@ class Branch extends Model
     }
 
     public function ckd(){
-        return $this->hasMany(CKD::class);
+        return $this->hasMany(Ckd::class);
     }
 
     public function sales(){
