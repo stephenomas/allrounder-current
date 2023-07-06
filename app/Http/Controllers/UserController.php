@@ -403,11 +403,24 @@ class UserController extends Controller
             $todayt = $todayt + $today_ckd_t;
 
             $prod = $branch ? $branch->products : Product::all();
-            $availm =  $branch ? $branch->products()->where('status', 'available')->where('type', 'motorcycle')->get() :Product::where('status', 'available')->where('type', 'motorcycle')->get();
-            $availt = $branch ? $branch->products()->where('status', 'available')->where('type', 'tricycle')->get() : Product::where('status', 'available')->where('type', 'tricycle')->get();
-            $soldm = $branch ? $branch->products()->where('status', 'sold')->where('type', 'motorcycle')->get() : Product::where('status', 'sold')->where('type', 'motorcycle')->get();
-            $soldt =  $branch ? $branch->products()->where('status', 'sold')->where('type', 'tricycle')->get() : Product::where('status', 'sold')->where('type', 'tricycle')->get();
 
+            $availm = $branch ? Product::whereHas('spec', function (Builder $query) use($branch) {
+                $query->where('branch_id', $branch->id);
+            })->where('status', 'available')->where('type', 'motorcycle')->get() :Product::where('status', 'available')->where('type', 'motorcycle')->get() ;
+
+            $availt = $branch ?  Product::whereHas('spec', function (Builder $query) use($branch) {
+                $query->where('branch_id',$branch->id);
+            })->where('status', 'available')->where('type', 'tricycle')->get() :  Product::where('status', 'available')->where('type', 'tricycle')->get() ;
+
+            $soldm = $branch ?  Product::whereHas('spec', function (Builder $query) use($branch) {
+                $query->where('branch_id', $branch->id);
+            })->where('status', 'sold')->where('type', 'motorcycle')->get() : Product::where('status', 'sold')->where('type', 'motorcycle')->get();
+
+            $soldt = $branch ?  Product::whereHas('spec', function (Builder $query) use($branch) {
+                $query->where('branch_id', $branch->id);
+            })->where('status', 'sold')->where('type', 'tricycle')->get() : Product::where('status', 'sold')->where('type', 'tricycle')->get() ;
+
+           
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
         }else{
