@@ -48,15 +48,20 @@ class CkdController extends Controller
     }
 
     public function index(){
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
+        $link = route('viewckd');
         if(Utilities::admin()){
-            $prod = Ckd::all();
+            $prod = Ckd::when($branch, function($query) use ($branch){
+                $query->where('branch_id', $branch->id);
+            })->orderBy('id', 'desc')->get();
         }else{
             $branch = Auth::user()->branch->id;
             $prod = Ckd::where('branch_id', $branch)->get();
         }
 
 
-        return view('view-ckd', compact('prod'));
+        return view('view-ckd', compact('prod', 'link', 'branches'));
     }
 
     public function edit(Ckd $ckd){

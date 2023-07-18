@@ -1,8 +1,11 @@
 <?php
 namespace App\Helpers;
 
+use App\Models\Branch;
 use App\Models\Warehouse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class Utilities{
@@ -23,4 +26,16 @@ class Utilities{
             return $warehouse ? true : false;
         }
     }
+
+
+    public static function getBranches() : Collection {
+        $branches = Branch::all();
+        return $branches;
+    }
+
+    public static function RequestBranch() : bool | Branch {
+        $branch = request('branch') &&  request('branch') != 0 ? Branch::findOrFail( request('branch')) : false;
+        return $branch;
+    }
+
 }

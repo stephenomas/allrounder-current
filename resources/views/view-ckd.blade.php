@@ -8,6 +8,7 @@
     <div class="">
         <div class="page-header-title">
             <h4 class="page-title">Ckd</h4>
+            @include('partials.branchfilter')
         </div>
     </div>
 

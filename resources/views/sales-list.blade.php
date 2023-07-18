@@ -5,6 +5,7 @@
     <div class="">
         <div class="page-header-title">
             <h4 class="page-title">Sales</h4>
+            @include('partials.branchfilter')
         </div>
     </div>
 

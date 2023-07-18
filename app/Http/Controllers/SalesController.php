@@ -28,15 +28,20 @@ class SalesController extends Controller
 
     public function index()
     {
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
+        $link = route('sales-list.index');
         $id = Auth::user()->id;
         $role = Auth::user()->role;
         if($role == 1){
-            $sale = Sales::orderBy('id', 'desc')->get();
+            $sale = Sales::when($branch, function($query)use($branch){
+                $query->where('branch_id', $branch->id);
+            })->orderBy('id', 'desc')->get();
         }else{
             $sale = Sales::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
         }
 
-        return view('sales-list', compact('sale'));
+        return view('sales-list', compact('sale', 'branches', 'link'));
     }
 
     /**
@@ -447,7 +452,7 @@ class SalesController extends Controller
                 "tricycles" => $todayt,
                 "amount" => $today_sale,
                 "date" => $nowstring
-            ]]);                                                                                                                                                                                                                                                                                                                                                                                
+            ]]);
         }
 
 

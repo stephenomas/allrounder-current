@@ -28,12 +28,12 @@ Route::post('/login', [UserController::class, 'login'])->name('signin');
 Route::get('/add-products', [ProductController::class, 'tricyclecreate'])->middleware('addproduct');
 Route::get('/brand/{brand}/', [ProductController::class, 'brandsel'])->middleware('addproduct');
 Route::post('/add-products', [ProductController::class, 'store'])->middleware('addproduct');
-Route::get('/view-products', [ProductController::class, 'index'])->middleware('viewproduct');
+Route::get('/view-products', [ProductController::class, 'index'])->middleware('viewproduct')->name('viewproducts');
 Route::get('/edit-product/{id}', [ProductController::class, 'edit'])->middleware('viewproduct');
 Route::put('/edit-product/{id}', [ProductController::class, 'update'])->middleware('viewproduct');
 Route::get('/edit-product/{product}/delete', [ProductController::class, 'destroy'])->middleware('viewproduct');
-Route::get('/view-inventory', [ProductController::class, 'inventory'])->middleware('viewproduct');
-Route::get('/sold-products', [ProductController::class, 'sold'])->middleware('viewproduct');
+Route::get('/view-inventory', [ProductController::class, 'inventory'])->middleware('viewproduct')->name('inventory');
+Route::get('/sold-products', [ProductController::class, 'sold'])->middleware('viewproduct')->name('soldproducts');
 Route::get('/view-stats', [ProductController::class, 'stats'])->middleware('viewproduct');
 
 Route::get('/new-sale', [SalesController::class, 'create'])->middleware('newsale');
@@ -112,7 +112,7 @@ Route::middleware('addproduct')->group(function (){
 });
 
 Route::middleware('viewproduct')->group(function (){
-    Route::get('/view-ckd', [CkdController::class, 'index']);
+    Route::get('/view-ckd', [CkdController::class, 'index'])->name('viewckd');
     Route::get('/ckdhistory', [CkdController::class, 'history']);
     Route::get('/edit-ckd/{ckd}/edit', [CkdController::class, 'edit']);
     Route::post('/edit-ckd/{ckd}/edit', [CkdController::class, 'update']);

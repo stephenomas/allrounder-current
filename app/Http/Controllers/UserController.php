@@ -420,7 +420,7 @@ class UserController extends Controller
                 $query->where('branch_id', $branch->id);
             })->where('status', 'sold')->where('type', 'tricycle')->get() : Product::where('status', 'sold')->where('type', 'tricycle')->get() ;
 
-           
+
             $report = Report::where('from', 0)->orderBy('id', 'desc')->limit(3)->get();
 
         }else{

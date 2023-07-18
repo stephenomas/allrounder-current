@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Branch;
 use App\Models\Product;
 use App\Models\SalesItem;
+use App\Helpers\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,8 +22,15 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
+        $link = route('viewproducts');
          if(Auth::user()->role == 1){
-            $prod = Product::all();
+            $prod = Product::when($branch, function($query) use($branch){
+                $query->whereHas('spec',  function (Builder $query)use($branch) {
+                    $query->where('branch_id', $branch->id);
+                    });
+            })->orderBy('id', 'desc')->get();
 
         }else{
             $id = Auth::user()->branch_id;
@@ -31,21 +39,28 @@ class ProductController extends Controller
             })->get();
         }
 
-        return view('view-products', compact('prod'));
+        return view('view-products', compact('prod', 'link', 'branches'));
     }
     public function inventory()
     {
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
+        $link = route('inventory');
         if(Auth::user()->role == 1){
-            $prod = Product::where('status', 'available')->get();
+            $prod = Product::when($branch, function($query) use($branch){
+                $query->whereHas('spec',  function (Builder $query)use($branch) {
+                    $query->where('branch_id', $branch->id);
+                    });
+            })->where('status', 'available')->orderBy('id', 'desc')->get();
 
         }else{
             $id = Auth::user()->branch_id;
         $prod = Product::whereHas('spec', function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
-        })->where('status', 'available')->get();
+        })->where('status', 'available')->orderBy('id', 'desc')->get();
         }
 
-        return view('view-products', compact('prod'));
+        return view('view-products', compact('prod', 'link', 'branches'));
     }
     public function stats()
     {
@@ -320,17 +335,23 @@ class ProductController extends Controller
     }
 
     public function sold(){
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
+        $link = route('soldproducts');
         if(Auth::user()->role == 1){
-            $prod = Product::where('status', 'sold')->get();
-
+            $prod = Product::when($branch, function($query) use($branch){
+                $query->whereHas('spec',  function (Builder $query)use($branch) {
+                    $query->where('branch_id', $branch->id);
+                    });
+            })->where('status', 'sold')->orderBy('id', 'desc')->get();
         }else{
             $id = Auth::user()->branch_id;
             $prod = Product::whereHas('spec',  function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
-            })->where('status', 'sold')->get();
+            })->where('status', 'sold')->orderBy('id', 'desc')->get();
         }
 
-        return view('sold-products', compact('prod'));
+        return view('sold-products', compact('prod','link', 'branches'));
     }
 
     public function populate(){
