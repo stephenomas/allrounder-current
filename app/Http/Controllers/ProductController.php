@@ -55,7 +55,7 @@ class ProductController extends Controller
 
         }else{
             $id = Auth::user()->branch_id;
-        $prod = Product::whereHas('spec', function (Builder $query) {
+            $prod = Product::whereHas('spec', function (Builder $query) {
             $query->where('branch_id', Auth::user()->branch_id);
         })->where('status', 'available')->orderBy('id', 'desc')->get();
         }

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MobileController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +16,12 @@ use App\Http\Controllers\MobileController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/branch/create', [MobileController::class, 'create']);
-Route::get('/branch', [MobileController::class, 'index']);
-Route::get('/branch/{branch}/edit', [MobileController::class, 'edit']);
-Route::post('/branch/{branch}/edit', [MobileController::class, 'update']);
-Route::post('/add-branch/{branch}/delete', [MobileController::class, 'delete']);
+Route::prefix('inventory')->group(function(){
 
+    Route::get('search', [InventoryController::class, 'search']);
+    Route::get('addition', [InventoryController::class, 'addition']);
+});
+Route::post('permission/create', [PermissionController::class, 'store']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

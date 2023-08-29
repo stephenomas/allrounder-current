@@ -29,4 +29,8 @@ class Spec extends Model
     public function warehouse(){
         return $this->hasMany(Warehouse::class);
     }
+
+    public function inventory(){
+        return $this->hasMany(Inventory::class);
+    }
 }

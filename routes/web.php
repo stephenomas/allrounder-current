@@ -7,6 +7,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\NumberPlateController;
 
@@ -136,6 +137,15 @@ Route::middleware(['auth', 'warehouse'])->group(function(){
 Route::get('/cron-jobs/sendsalereport', [SalesController::class, 'send_sales_report']);
 Route::get('/mail-template', function(){
     return view('mail.newsales-mail');
+});
+
+Route::prefix('inventory')->name('inventory.')->group(function(){
+    Route::get('populate', [InventoryController::class, 'populate']);
+    Route::middleware(['auth'])->group(function (){
+        Route::get('search', [InventoryController::class, 'search']);
+        Route::get('added', [InventoryController::class, 'addition'])->name('added');
+    });
+
 });
 // Route::get('/populate', [ProductController::class, 'populate']);
 require __DIR__.'/auth.php';

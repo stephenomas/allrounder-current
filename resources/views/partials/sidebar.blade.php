@@ -75,19 +75,29 @@
                         @if (Auth::user()->role == 1 or Auth::user()->access->addproduct == 1 )
                         <li><a href="/add-products">Add product</a></li>
                         @endif
-
                         @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
                         <li><a href="/view-products">View Products</a></li>
                         @endif
                         @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
-                        <li><a href="/view-inventory">View Inventory</a></li>
-                        @endif
-                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
                         <li><a href="/sold-products">Sold products</a></li>
                         @endif
-                        @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
-                        <li><a href="/view-stats">View Statistics</a></li>
-                        @endif
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><span> Inventory </span><span class="float-right"><i class="mdi mdi-plus"></i></span></a>
+                            <ul class="list-unstyled">
+                                @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                                <li><a href="/view-inventory">View Inventory</a></li>
+                                @endif
+                                @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                                <li><a href="#">Stock History</a></li>
+                                @endif
+                                @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                                <li><a href="{{route('inventory.added')}}">Added Stock History</a></li>
+                                @endif
+                                @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
+                                <li><a href="/view-stats">View Statistics</a></li>
+                                @endif
+                            </ul>
+                        </li>
 
 
                     </ul>

@@ -43,7 +43,7 @@
                                 <tbody>
                                     @foreach ( $prod as $prods )
                                     <tr>
-                                        <td>{{$prods->brand->name}}</td>
+                                        <td>{{$prods->brand->name ?? ''}}</td>
                                         <td>{{$prods->name}}</td>
                                         <td>{{App\Models\Product::where('spec_id', $prods->id)->where('status', 'sold')->get()->count()}}</td>
                                         <td>{{App\Models\Product::where('spec_id', $prods->id)->where('status', 'available')->get()->count()}}</td>
