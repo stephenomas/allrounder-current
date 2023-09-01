@@ -11,5 +11,7 @@ class Inventory extends Model
 
     protected $guarded = [];
 
-    
+    public function spec(){
+        return $this->belongsTo(Spec::class);
+    }
 }

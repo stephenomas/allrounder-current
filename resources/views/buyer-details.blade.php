@@ -35,7 +35,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-password-input">Number</label>
                                     <div class="col-sm-10">
-                                        <input type="number" name="number" required class="form-control" placeholder="080" id="example-password-input">
+                                        <input type="number" name="number" min="11" max="11" required class="form-control" placeholder="080" id="example-password-input">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -48,6 +48,14 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label">Payment Method</label>
                                     <div class="col-sm-10">
+                                        {{-- <div class="d-flex">
+                                            <span>
+                                                <span>POS</span><input type="checkbox">
+                                            </span>
+                                            <span>
+                                                <span>Bank Transfer</span><input type="checkbox">
+                                            </span>
+                                        </div> --}}
                                         <select name="paymentmethod" class="form-control">
                                             <option>Select Payment Method</option>
                                             <option>Transfer</option>

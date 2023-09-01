@@ -142,7 +142,7 @@ Route::get('/mail-template', function(){
 Route::prefix('inventory')->name('inventory.')->group(function(){
     Route::get('populate', [InventoryController::class, 'populate']);
     Route::middleware(['auth'])->group(function (){
-        Route::get('search', [InventoryController::class, 'search']);
+        Route::get('search', [InventoryController::class, 'search'])->name('search');
         Route::get('added', [InventoryController::class, 'addition'])->name('added');
     });
 

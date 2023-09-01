@@ -7,6 +7,7 @@ use App\Models\Spec;
 use App\Models\Product;
 use App\Models\Inventory;
 use App\Helpers\Utilities;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,12 +33,27 @@ class InventoryController extends Controller
     }
 
 
-    public function search(Request $request){
-        $branch = $request->branch;
+    public function search(Request $request){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+        $branches = Utilities::getBranches();
+        $branch = Utilities::RequestBranch();
         $start = Carbon::parse($request->start_date)->toDateString();
-        $end = Carbon::parse($request->end_date)->addDay()->toDateString();
-        $inventory = Inventory::where('created_at', '>', $start)->where('created_at', '<', $end)->get();
-        return response()->json($inventory, 200);
+        $end = Carbon::parse($request->start_date)->addDay()->toDateString();
+
+        if(Utilities::admin()){
+            $inventories = Inventory::where('created_at','>=', $start)->where('created_at', '<', $end)->when($branch, function($query, $branch){
+                $query->whereHas('spec', function(Builder $nextquery) use ($branch){
+                    $nextquery->where('branch_id', $branch->id);
+                });
+            })->orderBy('id', 'desc')->get();
+        }else{
+            $id = Auth::user()->branch_id;
+            $inventories = Inventory::where('created_at', $start)->whereHas('spec', function(Builder $nextquery) use ($id){
+                    $nextquery->where('branch_id', $id);
+            })->orderBy('id', 'desc')->get();
+        }
+
+        $inventories = $request->start_date ? $inventories : [];
+        return view('stock-history', compact('inventories', 'start', 'branches', 'branch'));
     }
 
     public function addition(Request $request){
@@ -45,7 +61,7 @@ class InventoryController extends Controller
         $branch = Utilities::RequestBranch();
         $start = Carbon::parse($request->start_date)->toDateString();
         $end = Carbon::parse($request->end_date)->addDay()->toDateString();
-        if(Auth::user()->role == 1){
+        if(Utilities::admin()){
             $specs = Spec::when($branch, function($query, $branch){
                 $query->where('branch_id', $branch->id);
             })->orderBy('id', 'desc')->get();

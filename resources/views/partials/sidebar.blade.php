@@ -88,7 +88,7 @@
                                 <li><a href="/view-inventory">View Inventory</a></li>
                                 @endif
                                 @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
-                                <li><a href="#">Stock History</a></li>
+                                <li><a href="{{route('inventory.search')}}">Stock History</a></li>
                                 @endif
                                 @if (Auth::user()->role == 1 or Auth::user()->access->viewproduct == 1 )
                                 <li><a href="{{route('inventory.added')}}">Added Stock History</a></li>
