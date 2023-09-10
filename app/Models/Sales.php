@@ -23,4 +23,7 @@ class Sales extends Model
         return $this->belongsTo(Branch::class);
     }
 
+    public function paymentmethods(){
+        return $this->hasMany(PaymentMethod::class, 'sale_id');
+    }
 }

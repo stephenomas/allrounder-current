@@ -364,6 +364,8 @@ class UserController extends Controller
             $ckdm = $branch ? $branch->ckd()->where('type', 'Motorcycle')->get()->sum('amount') : Ckd::where('type', 'Motorcycle')->get()->sum('amount');
             $ckdt = $branch ? $branch->ckd()->where('type', 'Tricycle')->get()->sum('amount') : Ckd::where('type', 'Tricycle')->get()->sum('amount');
 
+            $pendingSales = $branch ? $branch->sales()->where('paymentstatus', 'Pending')->get() : Sales::where('paymentstatus', 'Pending')->get();
+
             $sale = $branch ? $branch->sales()->where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get() : Sales::where('paymentstatus', 'Paid')->orWhere('paymentstatus', 'Pending')->get();
 
             foreach($sale as $sales){
@@ -426,9 +428,8 @@ class UserController extends Controller
         }else{
             $ckdm = Ckd::where('type', 'Motorcycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
             $ckdt = Ckd::where('type', 'Tricycle')->where('branch_id', Auth::user()->branch_id)->get()->sum('amount');
-            // $sale = Sales::whereHas('user', function(Builder $query){
-            //     $query->where('branch_id', Auth::user()->branch_id);
-            // })
+
+                $pendingSales = Sales::where('branch_id', Auth::user()->branch_id)->where('paymentstatus', 'Pending')->get();
                 $sale = Sales::where('branch_id', Auth::user()->branch_id)
                 ->where('paymentstatus', 'Paid')
                 ->orWhere('paymentstatus', 'Pending')->get();
@@ -500,7 +501,7 @@ class UserController extends Controller
 
             $report = Report::where('from', Auth::user()->id)->orderBy('id', 'desc')->limit(1)->get();
         }
-        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt', 'ckdsoldm', 'ckdsoldt', 'branches'));
+        return view('dashboard', compact('sale','todayt','todaym','soldm','soldt','prod','availt','availm','report', 'sal', 'ckdm', 'ckdt', 'ckdsoldm', 'ckdsoldt', 'branches', 'pendingSales'));
 
     }
 }

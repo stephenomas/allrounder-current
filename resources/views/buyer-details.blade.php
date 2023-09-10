@@ -35,7 +35,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-password-input">Number</label>
                                     <div class="col-sm-10">
-                                        <input type="number" name="number" required class="form-control" placeholder="080" id="example-password-input">
+                                        <input type="text" name="number" maxlength="11" minlength="11" required class="form-control" placeholder="080" id="example-password-input">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -45,45 +45,8 @@
                                     </div>
                                 </div>
                                 <input type="number" hidden name='price' value="{{\Cart::session(Auth::user()->id)->getSubTotal()}}">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 control-label">Payment Method</label>
-                                    <div class="col-sm-10">
-                                        {{-- <div class="d-flex justify-content-around">
-                                            <span>
-                                                <span class="mr-2">POS</span><input class="" type="checkbox">
-                                            </span>
-                                            <span>
-                                                <span class="mr-2">Bank Transfer</span><input type="checkbox">
-                                            </span>
-                                            <span>
-                                                <span class="mr-2">Cash</span><input type="checkbox">
-                                            </span>
-                                        </div> --}}
-                                        <select name="paymentmethod" class="form-control">
-                                            <option>Select Payment Method</option>
-                                            <option>Transfer</option>
-                                            <option>POS</option>
-                                            <option>Cash</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row ">
-                                    <label class="col-sm-2 control-label">Payment Status</label>
-                                    <div class="col-sm-10">
-                                        <select name="paymentstatus" class="form-control">
-                                            <option>Select Payment Status</option>
-                                            <option>Paid</option>
-                                            <option>Pending</option>
-                                            <option>Refunded</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="example-password-input">Account Paid to</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="account" required class="form-control" placeholder="080" id="example-password-input">
-                                    </div>
-                                </div>
+                               @include('partials.paymentmethods')
+                               
                                 <?php
                                 $userId =  Auth::user()->id;
                                  $content = \Cart::session($userId)->getContent();
@@ -127,6 +90,7 @@
         <!-- container -->
 
     </div>
-    <!-- Page content Wrapper -->
+
+
 
 @endsection

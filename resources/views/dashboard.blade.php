@@ -94,6 +94,21 @@
                                         <div>
                                             <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#6cbafa" value="{{$soldm->count() + $ckdsoldm->sum('unit')}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
                                             <div class="float-right">
+                                                <h2 class="text-primary mb-0">{{$pendingSales->count()}}</h2>
+                                                <p class="text-muted mb-0 mt-2">Pending Sales</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-heading p-4">
+                                        <div>
+                                            <input class="knob" data-width="80" data-height="80" data-linecap=round data-fgColor="#6cbafa" value="{{$soldm->count() + $ckdsoldm->sum('unit')}}" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
+                                            <div class="float-right">
                                                 <h2 class="text-primary mb-0">{{$soldm->count() + $ckdsoldm->sum('unit')}}</h2>
                                                 <p class="text-muted mb-0 mt-2">Total Motorcycle Sales</p>
                                             </div>

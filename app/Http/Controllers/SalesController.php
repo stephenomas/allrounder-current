@@ -25,6 +25,33 @@ class SalesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    private function paymentmethod(Request $request, $sale) : void{
+
+        if($request->pos){
+            $sale->paymentmethods()->create([
+                'method' => 'POS',
+                'amount' => $request->posAmount,
+                'bank' => $request->posBank,
+                'account' => $request->posAccount
+            ]);
+        }
+        if($request->transfer){
+            $sale->paymentmethods()->create([
+                'method' => 'TRANSFER',
+                'amount' => $request->transferAmount,
+                'bank' => $request->transferBank,
+                'account' => $request->transferAccount
+            ]);
+        }
+        if($request->cash){
+            $sale->paymentmethods()->create([
+                'method' => 'CASH',
+                'amount' => $request->cashAmount,
+            ]);
+        }
+
+
+    }
 
     public function index()
     {
@@ -212,24 +239,27 @@ class SalesController extends Controller
 
     public function buyersave(Request $request)
     {
+        $paymentmethod = json_encode([$request->pos ? 'POS' : "", $request->transfer ? 'TRANSFER': "", $request->cash ? 'CASH' : ""]);
         $userId = Auth::user()->id;
         $branch = Auth::user()->branch->id;
         $con = \Cart::session($userId)->getContent();
         $num = \Cart::session($userId)->getContent()->count();
-        $sale = Auth::user()->sales()->create([
+
+       $sale = Auth::user()->sales()->create([
             'name' => $request->name,
             'email' => $request->email,
             'number' => $request->number,
             'address' => $request->address,
-            'paymentmethod' => $request->paymentmethod,
+            'paymentmethod' => $paymentmethod,
             'paymentstatus' => $request->paymentstatus,
             'no_of_ckd' => 0,
             'account' => $request->account,
             'unit' => $num,
             'price' => $request->price,
+            'discountPrice' => $request->discount ? $request->discountPrice : null,
             'branch_id' => $branch
         ]);
-
+        $this->paymentmethod($request, $sale);
         foreach($con as $co){
 
             $sale->salesitem()->create([
@@ -336,7 +366,6 @@ class SalesController extends Controller
             'address' => 'required',
             'ckd_type' => 'required',
             'no_of_ckd' => 'required',
-            'paymentmethod' => 'required',
             'paymentstatus' => 'required'
         ]);
 
@@ -348,23 +377,25 @@ class SalesController extends Controller
         }elseif($ckd->amount < $request->no_of_ckd){
             return back()->with('failed', 'Only '.$ckd->amount.' left in the system');
         }
-            $sale = Auth::user()->sales()->create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'number' => $request->number,
-                'address' => $request->address,
-                'paymentmethod' => $request->paymentmethod,
-                'paymentstatus' => $request->paymentstatus,
-                'account' => $request->account,
-                'unit' => $request->no_of_ckd,
-                'no_of_ckd' => $request->no_of_ckd,
-                'price' => $spec->price * $request->no_of_ckd,
-                'ckd_type' => $spec->name,
-                'no_of_engine' => $request->engines,
-                'no_of_bolts' => $request->bolts,
-                'spec_type' => $spec->type,
-                'branch_id' => $branch
-            ]);
+        $paymentmethod = json_encode([$request->pos ? 'POS' : "", $request->transfer ? 'TRANSFER': "", $request->cash ? 'CASH' : ""]);
+        $sale = Auth::user()->sales()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'number' => $request->number,
+            'address' => $request->address,
+            'paymentmethod' => $paymentmethod,
+            'paymentstatus' => $request->paymentstatus,
+            'account' => $request->account,
+            'unit' => $request->no_of_ckd,
+            'no_of_ckd' => $request->no_of_ckd,
+            'price' => $spec->price * $request->no_of_ckd,
+            'ckd_type' => $spec->name,
+            'no_of_engine' => $request->engines,
+            'no_of_bolts' => $request->bolts,
+            'spec_type' => $spec->type,
+            'branch_id' => $branch
+        ]);
+        $this->paymentmethod($request, $sale);
         if($sale){
             $num = $ckd->amount - $request->no_of_ckd;
             $ckd->update([

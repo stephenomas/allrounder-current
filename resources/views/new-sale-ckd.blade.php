@@ -51,7 +51,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label" for="example-password-input">Number</label>
                                     <div class="col-sm-10">
-                                        <input type="number" name="number" required class="form-control" placeholder="080" id="example-password-input">
+                                        <input type="text" name="number" maxlength="11" minlength="11" required class="form-control" placeholder="080" id="example-password-input">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -90,34 +90,8 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
-                                    <label class="col-sm-2 control-label">Payment Method</label>
-                                    <div class="col-sm-10">
-                                        <select name="paymentmethod" class="form-control">
-                                            <option>Select Payment Method</option>
-                                            <option>Transfer</option>
-                                            <option>POS</option>
-                                            <option>Cash</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row ">
-                                    <label class="col-sm-2 control-label">Payment Status</label>
-                                    <div class="col-sm-10">
-                                        <select name="paymentstatus" class="form-control">
-                                            <option>Select Payment Status</option>
-                                            <option>Paid</option>
-                                            <option>Pending</option>
-                                            <option>Refunded</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 control-label" for="example-password-input">Account Paid to</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" name="account" required class="form-control" placeholder="080" id="example-password-input">
-                                    </div>
-                                </div>
+                                @include('partials.paymentmethods')
+                               
 
                             <button type="submit" name="sub" class="btn btn-primary waves-effect waves-light m-l-10">Proceed</button>
                             </form>

@@ -86,7 +86,25 @@ div{
                                                     <div class="col-6">
                                                         <address>
                                                             <strong>Payment Method:</strong><br>
-                                                            {{$sale->paymentmethod}}
+                                                            @php
+                                                                $method = json_decode($sale->paymentmethod);
+                                                                $count = count($method);
+                                                                $string = '';
+                                                                foreach ($method as $key => $value) {
+                                                                  if($value !== ""){
+                                                                    if($key == ($count-1)){
+                                                                        $string .= $value;
+                                                                    }else{
+                                                                        if($method[$key+1] != ""){
+                                                                            $string .= $value.', ';
+                                                                        }else{
+                                                                            $string .= $value;
+                                                                        }
+                                                                    }
+                                                                  }
+                                                                }
+                                                            @endphp
+                                                            {{$string}}
                                                             <br>
                                                             {{$sale->email}}
                                                         </address>
@@ -142,6 +160,13 @@ div{
                                                                             <th>total</th>
                                                                             <th>{{number_format($sale->price)}}</th>
                                                                         </tr>
+                                                                        @if ($sale->discountPrice)
+                                                                        <tr>
+                                                                            <th>Discount Price</th>
+                                                                            <th>{{number_format($sale->discountPrice)}}</th>
+                                                                        </tr>
+                                                                        @endif
+
                                                                     </tbody>
                                                                 @else
                                                                     <thead>
@@ -176,6 +201,13 @@ div{
                                                                             <th>total</th>
                                                                             <th>{{number_format($sale->price)}}</th>
                                                                         </tr>
+                                                                        @if ($sale->discountPrice)
+                                                                        <tr>
+                                                                            <th>Discount Price</th>
+                                                                            <th>{{number_format($sale->discountPrice)}}</th>
+                                                                        </tr>
+                                                                        @endif
+
                                                                     </tbody>
                                                                 @endif
                                                             </table>
