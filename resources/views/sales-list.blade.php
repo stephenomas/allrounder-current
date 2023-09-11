@@ -30,8 +30,9 @@
 
                                         <th>Unit</th>
                                         {{-- <th>Sale Type</th> --}}
-                                        <th>Branch</th>
+                              
                                         <th>Date</th>
+                                        <th>Status</th>
                                         <th>Process</th>
                                     </tr>
                                 </thead>
@@ -56,8 +57,9 @@
                                                 CBU
                                             @endif
                                         </td> --}}
-                                        <td>{{$sales->user->branch->name}}</td>
+
                                         <td>{{$sales->created_at}}</td>
+                                        <td>{{$sales->paymentstatus}}</td>
                                         <td><a href="{{route('sales-list.show', ['sales_list'=> $sales->id])}}"><i class="ti-files"></i> Invoice </a> • @if (Auth::user()->role == 1)
 
                                        <a href="{{route('sales-list.edit', ['sales_list'=> $sales->id])}}"> <i class="ti-ruler-pencil"></i>Edit</a>
