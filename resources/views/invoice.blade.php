@@ -88,24 +88,31 @@ div{
                                                             <strong>Payment Method:</strong><br>
                                                             @php
                                                                 $method = json_decode($sale->paymentmethod);
-                                                                $count = count($method);
-                                                                $string = '';
-                                                                foreach ($method as $key => $value) {
-                                                                  if($value !== ""){
-                                                                    if($key == ($count-1)){
-                                                                        $string .= $value;
-                                                                    }else{
-                                                                        if($method[$key+1] != ""){
-                                                                            $string .= $value.', ';
-                                                                        }else{
+                                                                if(is_array($method)){
+                                                                    $count = count($method);
+                                                                    $string = '';
+                                                                    foreach ($method as $key => $value) {
+                                                                    if($value !== ""){
+                                                                        if($key == ($count-1)){
                                                                             $string .= $value;
+                                                                        }else{
+                                                                            if($method[$key+1] != ""){
+                                                                                $string .= $value.', ';
+                                                                            }else{
+                                                                                $string .= $value;
+                                                                            }
                                                                         }
                                                                     }
-                                                                  }
+                                                                    }
+                                                                }else{
+                                                                    $string = $sale->paymentmethod;
                                                                 }
+
                                                             @endphp
                                                             {{$string}}
                                                             <br>
+
+                                                            <strong>Staff:</strong><br>
                                                             {{$sale->email}}
                                                         </address>
                                                     </div>
